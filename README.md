@@ -2,6 +2,12 @@
 
 Site vitrine de pâtisserie : direction artistique rose et noire, gâteau 3D en rotation, présentoir animé et composition interactive des saveurs.
 
+[Ouvrir le site](https://quentin1312.github.io/cakema-site/)
+
+## Publication
+
+GitHub Pages publie le contenu de `dist/` via le workflow `.github/workflows/pages.yml` à chaque mise à jour de `main`.
+
 ## Démarrer en local
 
 Avec Node.js 18 ou plus récent :
