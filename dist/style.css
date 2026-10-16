@@ -159,12 +159,13 @@
 .photo-diptych figure:first-child img{object-position:50% 48%}.photo-diptych figure:last-child img{object-position:50% 39%}
 @media(min-width:761px) and (max-width:1100px){.hero-signature .hero-title{top:90px;font-size:17.8vw}.hero-signature .hero-model-wrap{left:22%;right:22%;bottom:105px}.photo-story{gap:17px}.photo-story img{height:270px}.photo-diptych img{height:285px}}
 @media(max-width:760px){
- .hero.hero-signature{height:calc(100svh - 80px);min-height:620px;max-height:850px}
- .hero-signature .hero-title{top:65px;left:var(--gutter);right:var(--gutter);bottom:auto;font-size:21.8vw;line-height:1.09;letter-spacing:-.035em;white-space:normal}
- .hero-signature .hero-title>span:last-child{font-size:.71em;margin-top:32px}
- .hero-signature .hero-model-wrap{top:100px;bottom:100px;left:1%;right:1%;width:auto}
- .hero-signature .hero-bottom{bottom:25px}
- .hero-signature .hero-bottom>.action-link{min-width:230px;min-height:50px;padding:14px 20px;font-size:11px}
+ .hero.hero-signature{height:calc(100svh - 80px);min-height:480px;max-height:820px;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;padding:24px var(--gutter);align-items:stretch}
+ .hero-signature .hero-title{position:relative;inset:auto;width:100%;font-size:clamp(60px,21.4vw,110px);line-height:1.02;letter-spacing:-.035em;white-space:normal;align-self:start}
+ .hero-signature .hero-title>span,.hero-signature .hero-title>span:last-child{text-align:center}
+ .hero-signature .hero-title>span:last-child{font-size:.73em;margin-top:8px}
+ .hero-signature .hero-model-wrap{position:relative;inset:auto;width:100%;height:100%;min-height:0;max-width:380px;max-height:440px;transform:none;justify-self:center;align-self:center}
+ .hero-signature .hero-bottom{position:relative;inset:auto;transform:none;width:100%;max-width:360px;justify-self:center}
+ .hero-signature .hero-bottom>.action-link{width:100%;min-width:0;min-height:52px;padding:15px 20px;font-size:12px}
  .photo-story{grid-template-columns:1fr 1fr;gap:19px 14px;padding:26px var(--gutter) 0}
  .story-table{grid-column:1/-1}.photo-story .story-table img{height:245px;object-position:50% 57%}
  .photo-story img{height:230px}.story-hands img{object-position:53% 40%}.story-finish img{object-position:50% 24%}
@@ -173,3 +174,11 @@
  .photo-diptych img{height:230px}.photo-diptych figure:first-child img{object-position:50% 44%}
 }
 
+
+/* Vector icons keep the same clean strokes on every device. */
+.ui-icon{display:inline-block;width:20px;height:20px;flex:none;vertical-align:middle;pointer-events:none}
+.action-link>span,.underlined-link>span,.header-contact>span,.anchor-action>i{display:inline-flex;align-items:center;justify-content:center;flex:none}
+.piece-arrow{display:grid;place-items:center}
+.footer-invitation .ui-icon{width:1em;height:1em}
+.footer-bottom a,.close-viewer,.close-event{display:inline-flex;align-items:center;gap:8px}
+.footer-bottom .ui-icon,.close-viewer .ui-icon,.close-event .ui-icon,.anchor-action .ui-icon{width:16px;height:16px}
