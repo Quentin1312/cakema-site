@@ -1,8 +1,8 @@
 <!doctype html><html lang="fr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#1e1a1b">
 <title>Cake’Ma — Un gâteau à votre image.</title><meta name="description" content="Des gâteaux qui ont quelque chose à raconter. Cake design sur mesure par Emma, à Aurillac.">
-<link rel="icon" type="image/jpeg" href="assets/logo-cakema.jpeg"><link rel="stylesheet" href="assets/fonts/fonts.css"><link rel="stylesheet" href="style.css?v=b80858bb0d22">
-<script type="module" src="assets/vendor/model-viewer.min.js"></script><script type="module" src="app.js?v=22ef24b9318d"></script>
+<link rel="icon" type="image/jpeg" href="assets/logo-cakema.jpeg"><link rel="stylesheet" href="assets/fonts/fonts.css"><link rel="stylesheet" href="style.css?v=15b5e8c50470">
+<script type="module" src="assets/vendor/model-viewer.min.js"></script><script type="module" src="app.js?v=b44f74d73b68"></script>
 </head><body>
 <a class="skip" href="#contenu">Aller au contenu</a>
 <header class="header"><a class="brand-logo" href="#" aria-label="Cake’Ma, accueil"><img src="assets/logo-cakema.jpeg" alt="Cake’Ma, logo original" width="64" height="64"></a><nav id="navigation" aria-label="Navigation principale"><a href="#pieces">Les pièces</a><a href="#emma">L’atelier</a><a href="#composition">À votre goût</a></nav><a class="header-contact" href="https://ig.me/m/cake_maaa" target="_blank" rel="noopener">On en parle <span aria-hidden="true"><svg class="ui-icon" data-icon="diagonal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 19 19 5M5 5h14v14"/></svg></span></a><button class="menu-button" aria-expanded="false" aria-controls="navigation"><span>Menu</span><i aria-hidden="true"></i></button></header>
@@ -23,6 +23,7 @@
 </section>
 <section id="composition" class="composition" aria-labelledby="composition-title">
  <div class="composition-heading"><p class="section-index">L’ATELIER DES SAVEURS</p><h2 id="composition-title">TROUVEZ <span>VOTRE ACCORD.</span></h2><p>Touchez le biscuit, le cœur ou la crème. <br>Choisissez un parfum, le gâteau se transforme.</p></div>
+ <div class="guest-composition"><label class="guest-count" for="recipe-guests">Pour <input id="recipe-guests" type="number" inputmode="numeric" min="15" max="300" step="1" value="30"> personnes</label><input id="recipe-size-range" type="range" min="15" max="300" step="5" value="30" aria-label="Nombre de personnes" aria-describedby="guest-tier-caption"><p class="guest-tiers" id="guest-tier-caption"><output id="tiers-label" for="recipe-guests recipe-size-range" aria-live="polite">1 étage</output>Aperçu à confirmer avec Emma.</p></div>
  <div class="flavour-studio">
   <button class="flavour-anchor anchor-biscuit" data-group="0" aria-pressed="true" aria-controls="flavour-palette"><span class="anchor-label">LE BISCUIT</span><strong id="selected-biscuit">Vanille</strong><span class="anchor-action">Changer <i aria-hidden="true"><svg class="ui-icon" data-icon="diagonal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 19 19 5M5 5h14v14"/></svg></i></span></button>
   <div class="sculpture-stage"><div id="recipe-canvas" role="img" aria-label="Gâteau en coupe 3D : vanille, framboise et mascarpone. Glissez pour tourner."><p class="recipe-loading" role="status">On dresse votre gâteau…</p><p class="cake-live-fallback" hidden>L’aperçu 3D n’est pas disponible dans ce navigateur. Vos choix restent disponibles.</p></div></div>
