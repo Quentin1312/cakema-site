@@ -182,3 +182,10 @@
 .footer-invitation .ui-icon{width:1em;height:1em}
 .footer-bottom a,.close-viewer,.close-event{display:inline-flex;align-items:center;gap:8px}
 .footer-bottom .ui-icon,.close-viewer .ui-icon,.close-event .ui-icon,.anchor-action .ui-icon{width:16px;height:16px}
+
+/* On phones, photographs slide on one plane with a constant 20px gap. */
+@media(max-width:760px){
+ .carousel-stage{--piece-card-width:min(68vw,280px);height:min(calc(90.667vw + 32px),405.34px);perspective:none}
+ .cake-ring{transform-style:flat}
+ .ring-card{width:var(--piece-card-width);height:calc(var(--piece-card-width) * 4 / 3);left:calc(var(--piece-card-width) / -2);top:calc(var(--piece-card-width) * -2 / 3);transform-style:flat;backface-visibility:visible;box-shadow:none;will-change:transform}
+}
