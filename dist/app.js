@@ -68,3 +68,11 @@ $('#event-panel').addEventListener('submit',async e=>{e.preventDefault();if(!e.t
 renderPalette();updateRecipe();
 
 const recipeObserver=new IntersectionObserver(async es=>{if(!es[0].isIntersecting)return;recipeObserver.disconnect();try{const {mountCake}=await import('./cake3d.js');cakeApi=await mountCake($('#recipe-canvas'),{...recipe});cakeApi.set({...recipe});$('.recipe-loading').hidden=true;$('#recipe-canvas').classList.add('is-ready');}catch(e){$('.recipe-loading').hidden=true;$('.cake-live-fallback').hidden=false;console.warn('Aperçu 3D indisponible : les choix de saveurs restent disponibles.');}},{rootMargin:'400px'});recipeObserver.observe($('#recipe-canvas'));
+
+// Bouton collant : visible après le hero, masqué près des autres appels à l'action
+const stickyCta=$('#sticky-cta');stickyCta.addEventListener('click',()=>eventDialog.showModal());
+const ctaHiders=new Set();let pastHero=false;
+const refreshCta=()=>stickyCta.classList.toggle('is-shown',pastHero&&ctaHiders.size===0);
+new IntersectionObserver(([e])=>{pastHero=!e.isIntersecting&&e.boundingClientRect.top<0;refreshCta();}).observe($('.hero'));
+const ctaObserver=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?ctaHiders.add(e.target):ctaHiders.delete(e.target));refreshCta();});
+['.accord-footer','#livraison','.footer'].forEach(s=>ctaObserver.observe($(s)));

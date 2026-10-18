@@ -195,3 +195,111 @@
 .guest-tiers{text-align:right;font-size:10px;line-height:1.5}
 #tiers-label{display:block;font:28px/1.2 var(--display);color:var(--pink)}
 @media(max-width:760px){.guest-composition{grid-template-columns:1fr auto;gap:6px 16px;padding:13px 0;margin:8px 0 22px}.guest-count{font-size:10px;gap:8px}.guest-count input{width:62px;font-size:24px}#recipe-size-range{grid-row:2;grid-column:1/-1}.guest-tiers{font-size:9px}#tiers-label{font-size:25px}}
+
+/* ============ Mise à jour 2026-10 : lisibilité mobile, étapes, CTA collant, grain, entrée du titre ============ */
+body .hero-signature .hero-badge, body .hero-badge {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 14px;
+  margin: 0 0 14px; color: var(--paper);
+  font: 700 11px/1.2 var(--body); letter-spacing: .12em; text-transform: uppercase;
+}
+.hero-badge span { display: inline-flex; align-items: center; gap: 14px; }
+.hero-badge span + span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--pink); }
+
+/* ---------- Section étapes ---------- */
+.steps { position: relative; padding: 58px var(--gutter) 46px; background: var(--ink); color: var(--paper); overflow: hidden; isolation: isolate; }
+.steps h2 { margin: 16px 0 28px; }
+.steps-track {
+  list-style: none; margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter) 6px;
+  display: grid; grid-auto-flow: column; grid-auto-columns: 78%; gap: 14px;
+  overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.steps-track::-webkit-scrollbar { display: none; }
+.steps-track li {
+  scroll-snap-align: start; padding: 22px 20px 24px;
+  border: 1px solid #ffffff2b; border-top: 6px solid var(--pink); border-radius: 4px;
+  background: #ffffff08;
+}
+.steps-track b { display: block; font: 400 76px/.9 var(--display); color: var(--pink); }
+.steps-track h3 { margin: 14px 0 8px; font: 400 32px/1 var(--display); text-transform: uppercase; }
+.steps-track p { font-size: 15px; line-height: 1.55; opacity: .85; }
+.steps-hint { margin-top: 14px; font: 700 11px var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--pale); }
+@media (min-width: 761px) {
+  .steps-track { grid-auto-flow: row; grid-template-columns: repeat(4, 1fr); overflow: visible; }
+  .steps-hint { display: none; }
+}
+
+/* ---------- CTA collé en bas, zone du pouce ---------- */
+.sticky-cta {
+  display: flex; border: 0; cursor: pointer; width: auto; position: fixed; z-index: 40;
+  left: 14px; right: 14px; bottom: max(14px, env(safe-area-inset-bottom));
+  min-height: 58px; padding: 0 22px; border-radius: 6px;
+  justify-content: space-between; align-items: center;
+  background: var(--pink); color: #fff;
+  font: 800 14px/1 var(--body); letter-spacing: .02em;
+  box-shadow: 0 14px 30px -10px #1e1a1bb0;
+  transform: translateY(150%); transition: transform .45s cubic-bezier(.2,.9,.2,1);
+}
+.sticky-cta span { font-weight: 600; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .85; }
+.sticky-cta.is-shown { transform: none; }
+@media (min-width: 761px) { .sticky-cta { left: auto; width: 340px; right: 28px; } }
+@media (max-width: 760px) { .header-contact { display: none; } }
+.footer { padding-bottom: 100px; }
+
+/* ---------- grain de papier sur les fonds sombres ---------- */
+.hero::after, .steps::after, .footer::after {
+  content: ""; position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  opacity: .16; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.footer { position: relative; isolation: isolate; }
+
+/* ---------- titre du hero qui monte au chargement ---------- */
+.hero-title > span { animation: rise 1s cubic-bezier(.2,.9,.2,1) both; }
+.hero-title > span:last-child { animation-delay: .15s; }
+.hero-badge { animation: rise 1s .35s cubic-bezier(.2,.9,.2,1) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(40%); } }
+
+body .accord-footer .section-index, body .palette-description > .section-index { font-size: 11px; }
+body .hero-bottom > .hero-badge, body .hero-bottom > .hero-badge span { font-size: 11px; }
+body .palette-description > p:last-child { font-size: 14px; }
+body .contact-copy > p:first-child { font-size: 16px; line-height: 1.65; }
+body .contact-copy .contact-location { font-size: 13px; }
+
+/* ---------- textes ≥ 11px et zones tactiles ≥ 44px sur mobile ---------- */
+@media (max-width: 760px) {
+  body .section-index { font-size: 11px; }
+  body .menu-button { min-height: 44px; min-width: 64px; font-size: 12px; }
+  body .header-contact { min-height: 44px; font-size: 12px; }
+  body .action-link, body .underlined-link { font-size: 13px; }
+  body .pieces-intro { font-size: 16px; max-width: none; }
+  body .pieces-intro .small-note { font-size: 12px; }
+  body .piece-arrow { width: 48px; height: 48px; }
+  body #piece-name { font-size: 18px; }
+  body #piece-category, body .piece-position { font-size: 11px; }
+  body .portrait > p { font-size: 12px; }
+  body .atelier-text { font-size: 16px; line-height: 1.6; }
+  body .atelier-text > p:first-child { font-size: 21px; line-height: 1.35; }
+  body .composition-heading > p:last-child { font-size: 16px; }
+  body .guest-count { font-size: 16px; }
+  body .guest-tiers { font-size: 12px; }
+  body .anchor-label { font-size: 11px; }
+  body .anchor-action { font-size: 12px; min-height: 44px; display: inline-flex; align-items: center; }
+  body .palette-name { font-size: 13px; }
+  body #ingredient-description { font-size: 15px; }
+  body #recipe-summary { font-size: 16px; }
+  body .contact-copy > p { font-size: 16px; }
+  body .contact-location { font-size: 13px; }
+  body .faq-list summary { font-size: 17px; min-height: 60px; }
+  body .faq-list summary > span { font-size: 11px; }
+  body .faq-list details > p { font-size: 15px; }
+  body .footer-invitation > p { font-size: 11px; }
+  body .footer-invitation > a { min-height: 48px; display: flex; align-items: center; }
+  body .footer-bottom { font-size: 12px; }
+  body .footer-bottom a { min-height: 44px; display: inline-flex; align-items: center; gap: 6px; }
+  body .event-dialog-top > .section-index { font-size: 11px; }
+  body .guest-note { font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-title > span, .hero-badge { animation: none; }
+}
