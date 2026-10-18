@@ -87,3 +87,6 @@ const menuThumbs=['cakes/mariage-hexagonal.jpeg','emma.png','cakes/framboises.jp
 menuNav.insertAdjacentHTML('beforeend','<div class="nav-foot"><button type="button" class="nav-cta">Préparer ma demande <span aria-hidden="true">→</span></button><p>Une question ? <a href="https://www.instagram.com/cake_maaa/" target="_blank" rel="noopener">Écrivez à Emma sur Instagram</a></p></div>');
 menuNav.querySelector('.nav-cta').addEventListener('click',()=>{closeMenu();eventDialog.showModal();});
 new MutationObserver(()=>{const open=menu.getAttribute('aria-expanded')==='true';menu.setAttribute('aria-label',open?'Fermer le menu':'Ouvrir le menu');html.classList.toggle('menu-open',open);}).observe(menu,{attributes:true,attributeFilter:['aria-expanded']});
+
+// Solution de secours sans Instagram : le même message, prêt dans un e-mail
+$('#event-panel').addEventListener('submit',()=>{const occasion=$('#occasion').value;$('#email-link').href=`mailto:contactcakema@gmail.com?subject=${encodeURIComponent('Demande de gâteau : '+occasion)}&body=${encodeURIComponent(makeRequest())}`;});

@@ -397,3 +397,7 @@ body .hero-signature .hero-bottom > .action-link { width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   body .header nav .nav-row, .nav-filling, .nav-foot, .tier-icon i { transition: none; }
 }
+
+/* Solution de secours e-mail dans la demande (Instagram reste le canal principal) */
+.email-fallback { margin: 14px 0 0; font-size: 15px; line-height: 1.5; }
+.email-fallback a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
