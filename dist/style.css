@@ -303,3 +303,42 @@ body .contact-copy .contact-location { font-size: 13px; }
 @media (prefers-reduced-motion: reduce) {
   .hero-title > span, .hero-badge { animation: none; }
 }
+
+/* ============ Hero : CAKE'MA devant le gâteau (2026-10) ============ */
+body .hero.hero-signature { display: block; position: relative; background: var(--ink); }
+body .hero-signature .hero-title {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+body .hero-signature .hero-model-wrap {
+  position: absolute; inset: 2% 0 132px; width: auto; height: auto;
+  max-width: 560px; max-height: none; margin: 0 auto; transform: none; z-index: 3;
+  justify-self: normal; align-self: normal;
+}
+body .hero-signature .hero-bottom {
+  position: absolute; left: 50%; right: auto; top: auto; bottom: 22px; transform: translateX(-50%);
+  width: min(360px, calc(100% - 2 * var(--gutter))); max-width: none; z-index: 6;
+}
+body .hero-signature .hero-bottom > .action-link { width: 100%; }
+.hero-wordmark {
+  position: absolute; inset: 0 0 132px; z-index: 5; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding-top: 18%; text-align: center;
+}
+.hero-kicker {
+  margin: 0 0 6px; padding: 0 16px; color: var(--paper);
+  font: 800 12px/1.2 var(--body); letter-spacing: .2em; text-transform: uppercase;
+  text-shadow: 0 1px 3px #0007, 0 1px 14px #0005;
+}
+.hero-word {
+  margin: 0; color: var(--paper);
+  font: 400 clamp(92px, 27vw, 300px)/.86 var(--display); letter-spacing: .01em;
+  text-shadow: 0 10px 40px #0003;
+  animation: hero-word-in 1.1s .2s cubic-bezier(.2,.9,.2,1) both;
+}
+@keyframes hero-word-in { from { opacity: 0; transform: translateY(18%) scale(.96); letter-spacing: .12em; } }
+@media (min-width: 761px) {
+  body .hero-signature .hero-model-wrap { inset: 0 0 120px; max-width: 640px; }
+  .hero-wordmark { padding-top: 12%; }
+  .hero-kicker { margin-bottom: 18px; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .hero-word { animation: none; } }
