@@ -15,7 +15,7 @@ hero.addEventListener('error',()=>{$('.hero-loading').innerHTML='<img src="asset
 const pieces=[['mariage-hexagonal','Hexagone dentelle','Mariage'],['naked-floral','Naked cake aux roses','Mariage'],['creme-florale','Couronne de fleurs','Anniversaire'],['fleurs-fuchsia','Volants fuchsia','Mariage'],['dix-huit','Dix-huit, noir et or','Anniversaire'],['geode-rose','Géode rose','Anniversaire'],['framboises','Framboises et volants','Anniversaire'],['chocolat-gourmand','Gourmand chocolat','Événement'],['one-ourson','Premier anniversaire','Anniversaire'],['chateau','Le château','Anniversaire'],['coeur-rouge','Cœur rouge','Événement'],['number-fruits','Number cake aux fruits','Anniversaire']];
 const ring=$('.cake-ring'),carousel=$('.carousel-stage');
 const motion={angle:0,velocity:reduced?0:-2.4,target:null};
-let dragging=false,dragAngle=0,startX=0,lastX=0,lastMoveAt=0,dragVelocity=0,moved=false,activePiece=-1,ringVisible=false,lastFrame=0,autoDirection=-1,keyboardMode=false,returnFocus=null;
+let carouselPaused=false,dragging=false,dragAngle=0,startX=0,lastX=0,lastMoveAt=0,dragVelocity=0,moved=false,activePiece=-1,ringVisible=false,lastFrame=0,autoDirection=-1,keyboardMode=false,returnFocus=null;
 const position=$('.piece-position'),category=$('#piece-category'),pieceName=$('#piece-name');
 function openPhoto(i){const [file,name]=pieces[i];returnFocus=document.activeElement;const viewer=$('.image-viewer');viewer.querySelector('img').src=`assets/cakes/${file}.jpeg`;viewer.querySelector('img').alt=name;viewer.querySelector('p').textContent=name;viewer.hidden=false;html.style.overflow='hidden';$('.close-viewer').focus();}
 function closePhoto(){if($('.image-viewer').hidden)return;$('.image-viewer').hidden=true;html.style.overflow='';returnFocus?.focus();}
@@ -40,7 +40,7 @@ $('.close-viewer').addEventListener('click',closePhoto);$('.image-viewer').addEv
 const viewer=$('.image-viewer');
 new IntersectionObserver(es=>ringVisible=es[0].isIntersecting,{rootMargin:'150px'}).observe(carousel);
 let lastVisibilityCheck=-Infinity;
-function animate(now){if(!document.hidden&&now-lastVisibilityCheck>250){const box=carousel.getBoundingClientRect();ringVisible=box.bottom>-150&&box.top<innerHeight+150;lastVisibilityCheck=now;}const dt=Math.min((now-lastFrame)/1000||0,.05);lastFrame=now;if(ringVisible&&!document.hidden){if(!dragging){const keyboardFocus=keyboardMode&&carousel.contains(document.activeElement);const cruise=!reduced&&!keyboardFocus&&viewer.hidden?autoDirection*2.4:0;advanceRotor(motion,dt,cruise);}paintRing();}requestAnimationFrame(animate);}
+function animate(now){if(!document.hidden&&now-lastVisibilityCheck>250){const box=carousel.getBoundingClientRect();ringVisible=box.bottom>-150&&box.top<innerHeight+150;lastVisibilityCheck=now;}const dt=Math.min((now-lastFrame)/1000||0,.05);lastFrame=now;if(ringVisible&&!document.hidden){if(!dragging){const keyboardFocus=keyboardMode&&carousel.contains(document.activeElement);const cruise=!reduced&&!keyboardFocus&&!carouselPaused&&viewer.hidden?autoDirection*2.4:0;advanceRotor(motion,dt,cruise);}paintRing();}requestAnimationFrame(animate);}
 layoutRing();requestAnimationFrame(animate);addEventListener('resize',layoutRing);
 
 const groups=[
@@ -55,8 +55,8 @@ function renderPalette(){const g=groups[currentGroup];$('#palette-title').textCo
 function updateRecipe(){groups.forEach(g=>$('#selected-'+g.key).textContent=g.options[recipe[g.key]][0]);const summary=groups.map(g=>g.options[recipe[g.key]][0]).join(' · ');const people=+($('#recipe-guests')?.value||$('#guests').value);const tierLabel=recipe.tiers+(recipe.tiers>1?' étages':' étage');const tierOutput=$('#tiers-label');if(tierOutput)tierOutput.textContent=tierLabel;$('#recipe-summary').textContent=summary;$('.event-recipe').textContent=summary+' · '+people+' personnes · '+tierLabel;$('#recipe-canvas').setAttribute('aria-label','Gâteau en coupe 3D : '+summary+', '+tierLabel+', pour '+people+' personnes. Glissez pour tourner.');$('#message-result').hidden=true;cakeApi?.set({...recipe});}
 document.querySelectorAll('.flavour-anchor').forEach(b=>b.addEventListener('click',()=>{currentGroup=+b.dataset.group;renderPalette();}));
 $('#flavour-options').addEventListener('change',e=>{if(!e.target.matches('input[type=radio]'))return;const g=groups[currentGroup];recipe[g.key]=+e.target.value;$('#ingredient-description').textContent=g.options[+e.target.value][3];updateRecipe();});
-const eventDialog=$('#event-dialog');document.querySelectorAll('#open-event,#open-contact').forEach(b=>b.addEventListener('click',()=>eventDialog.showModal()));$('.close-event').addEventListener('click',()=>eventDialog.close());eventDialog.addEventListener('click',e=>{if(e.target!==eventDialog)return;const r=eventDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)eventDialog.close();});
-function setGuestCount(value){const n=Math.max(15,Math.min(300,Math.round(+value||15)));['#guests','#recipe-guests','#recipe-size-range'].forEach(selector=>{const input=$(selector);if(input)input.value=n;});recipe.tiers=n<=30?1:n<=70?2:3;updateRecipe();}
+const eventDialog=$('#event-dialog');document.querySelectorAll('#open-event,#open-contact,#open-header').forEach(b=>b.addEventListener('click',()=>eventDialog.showModal()));$('.close-event').addEventListener('click',()=>eventDialog.close());eventDialog.addEventListener('click',e=>{if(e.target!==eventDialog)return;const r=eventDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)eventDialog.close();});
+function setGuestCount(value){const raw=Math.round(+value||0);const n=Math.max(15,Math.min(300,raw||15));document.querySelectorAll('.guest-adjust').forEach(el=>{el.hidden=raw===n;el.textContent=raw<15?'Minimum 15 personnes : nous avons ajusté à 15.':'Au-delà de 300 personnes, écrivez-nous directement : nous avons ajusté à 300.';});['#guests','#recipe-guests','#recipe-size-range'].forEach(selector=>{const input=$(selector);if(input)input.value=n;});recipe.tiers=n<=30?1:n<=70?2:3;updateRecipe();}
 $('#recipe-guests')?.addEventListener('input',e=>{const n=+e.target.value;if(n>=15&&n<=300)setGuestCount(n);});
 $('#recipe-guests')?.addEventListener('change',e=>setGuestCount(e.target.value));
 $('#recipe-size-range')?.addEventListener('input',e=>setGuestCount(e.target.value));
@@ -82,7 +82,7 @@ const menuNav=$('#navigation');
 menu.insertAdjacentHTML('beforeend','<span class="tier-icon" aria-hidden="true"><i></i><i></i><i></i></span>');
 menu.setAttribute('aria-label','Ouvrir le menu');
 menuNav.insertAdjacentHTML('beforeend','<a href="#etapes" class="nav-extra">Les étapes</a><a href="#questions" class="nav-extra">Questions</a>');
-const menuThumbs=['cakes/mariage-hexagonal.jpeg','emma.png','cakes/framboises.jpeg','cakes/naked-floral.jpeg','cakes/geode-rose.jpeg'];
+const menuThumbs=['cakes/mariage-hexagonal.jpeg','emma.webp','cakes/framboises.jpeg','cakes/naked-floral.jpeg','cakes/geode-rose.jpeg'];
 [...menuNav.querySelectorAll('a')].forEach((a,i,all)=>{a.classList.add('nav-row');a.style.setProperty('--i',i);a.innerHTML=`<span class="nav-label">${a.textContent}</span><img class="nav-thumb" src="assets/${menuThumbs[i]}" alt="" loading="lazy">`;if(i<all.length-1)a.insertAdjacentHTML('afterend','<i class="nav-filling" aria-hidden="true"></i>');});
 menuNav.insertAdjacentHTML('beforeend','<div class="nav-foot"><button type="button" class="nav-cta">Préparer ma demande <span aria-hidden="true">→</span></button><p>Une question ? <a href="https://www.instagram.com/cake_maaa/" target="_blank" rel="noopener">Écrivez à Emma sur Instagram</a></p></div>');
 menuNav.querySelector('.nav-cta').addEventListener('click',()=>{closeMenu();eventDialog.showModal();});
@@ -90,3 +90,12 @@ new MutationObserver(()=>{const open=menu.getAttribute('aria-expanded')==='true'
 
 // Solution de secours sans Instagram : le même message, prêt dans un e-mail
 $('#event-panel').addEventListener('submit',()=>{const occasion=$('#occasion').value;$('#email-link').href=`mailto:contactcakema@gmail.com?subject=${encodeURIComponent('Demande de gâteau : '+occasion)}&body=${encodeURIComponent(makeRequest())}`;});
+
+// Présentoir : bouton pause (le mouvement automatique durait sans fin)
+const carouselToggle=$('#carousel-toggle');
+carouselToggle.addEventListener('click',()=>{carouselPaused=!carouselPaused;carouselToggle.setAttribute('aria-pressed',String(carouselPaused));carouselToggle.textContent=carouselPaused?'Relancer le présentoir':'Mettre en pause';if(carouselPaused)motion.velocity=0;});
+if(reduced)carouselToggle.hidden=true;
+// Après « Générer mon message », le bouton Instagram reste visible
+$('#event-panel').addEventListener('submit',()=>setTimeout(()=>$('#message-result .action-link')?.scrollIntoView({block:'nearest',behavior:reduced?'auto':'smooth'}),60));
+// Le bouton collant se retire pendant la composition (elle a son propre bouton)
+ctaObserver.observe($('.flavour-studio'));

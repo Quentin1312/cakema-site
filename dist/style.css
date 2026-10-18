@@ -401,3 +401,58 @@ body .hero-signature .hero-bottom > .action-link { width: 100%; }
 /* Solution de secours e-mail dans la demande (Instagram reste le canal principal) */
 .email-fallback { margin: 14px 0 0; font-size: 15px; line-height: 1.5; }
 .email-fallback a { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; text-underline-offset: 3px; font-weight: 700; }
+
+/* ============ Corrections critique Impeccable (2026-10) ============ */
+:root { --pink-ink: #c2125d; } /* rose plus profond pour les petits textes sur fond clair (5,5:1) */
+
+/* Hero : promesse visible sous CAKE'MA, mot plus lisible sur le gâteau */
+body .hero-signature .hero-wordmark .hero-title {
+  position: static; display: block; align-self: center; inset: auto; width: auto; height: auto; overflow: visible; clip-path: none; transform: none;
+  margin: 14px 0 0; padding: 0 16px; white-space: normal; text-align: center;
+  font: 700 clamp(18px, 4.6vw, 24px)/1.3 var(--body); letter-spacing: 0; text-transform: none; color: var(--paper);
+  text-shadow: 0 1px 3px #1e1a1bcc, 0 2px 18px #1e1a1bb3;
+  animation: hero-word-in 1.1s .45s cubic-bezier(.2,.9,.2,1) both;
+}
+.hero-word { text-shadow: 0 0 2px #1e1a1b80, 0 3px 22px #1e1a1bc0, 0 0 70px #1e1a1b8c; }
+.hero-kicker { text-shadow: 0 1px 3px #1e1a1bd9, 0 1px 16px #1e1a1bb3; }
+@media (prefers-reduced-motion: reduce) { body .hero-signature .hero-wordmark .hero-title { animation: none; } }
+
+/* Bouton du header (ordinateur) devenu un vrai bouton */
+button.header-contact { border: 0; cursor: pointer; font-family: var(--body); }
+
+/* Invités : message d'ajustement */
+.guest-adjust { margin: 8px 0 0; font: 700 14px/1.4 var(--body); color: var(--pink-ink); }
+
+/* Présentoir : bouton pause */
+.carousel-toggle {
+  display: block; margin: 14px auto 0; min-height: 44px; padding: 0 12px; border: 0; background: transparent;
+  font: 600 14px var(--body); color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+
+/* Petits textes : 12 px minimum partout, ordinateur compris */
+body .section-index, body .anchor-label, body .piece-position, body #piece-category, body .faq-list summary > span,
+body .hero-badge, body .hero-bottom > .hero-badge span, body .steps-hint, body .footer-invitation > p { font-size: 12px; }
+body .anchor-action, body .palette-name, body .footer-bottom, body .footer-bottom a, body .close-event,
+body .close-viewer, body .event-date-label span, body .guest-tiers, body .small-note, body .portrait > p,
+body .contact-location { font-size: 13px; }
+@media (min-width: 761px) { body .header nav a { font-size: 14px; } body .header-contact { font-size: 13px; } }
+
+/* Contraste des petits textes */
+body .piece-position, body .anchor-label, body .faq-list summary > span,
+body .composition .section-index, body .palette-name { color: var(--pink-ink); }
+body .accord-footer .section-index { color: #6e5560; }
+body .contact-copy .contact-location { color: #5a3f49; }
+body .portrait > p { background: #1e1a1bb3; color: #fff; padding: 4px 8px; }
+
+/* Détails */
+.footer-brand { letter-spacing: -.02em; }
+.steps-track { scroll-padding-inline: var(--gutter); }
+body .accord-footer .section-index, body .palette-description > .section-index, body .event-dialog-top > .section-index,
+body .sticky-cta span, body .recipe-loading, body .ingredient-sample > i { font-size: 12px; }
+body .guest-count { font-size: max(14px, 1em); }
+@media (min-width: 761px) {
+  body .guest-count { font-size: 15px; }
+  body .header nav a { display: inline-flex; align-items: center; min-height: 44px; }
+  body .header-contact { min-height: 44px; }
+  body .footer-bottom a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
+}
