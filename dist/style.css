@@ -342,3 +342,58 @@ body .hero-signature .hero-bottom > .action-link { width: 100%; }
   .hero-kicker { margin-bottom: 18px; font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) { .hero-word { animation: none; } }
+
+/* ============ Menu mobile « coupe de layer cake » (2026-10) ============ */
+.tier-icon, .nav-thumb, .nav-filling, .nav-foot, .header nav .nav-extra { display: none; }
+@media (max-width: 760px) {
+  body .menu-button {
+    margin-left: auto; position: relative; z-index: 3;
+    display: grid; place-items: center; width: 48px; height: 48px; min-width: 0; min-height: 0;
+    padding: 0; border: 0; border-radius: 0; background: transparent; color: var(--paper);
+  }
+  body .menu-button > span:first-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .tier-icon { display: block; position: relative; width: 26px; height: 22px; }
+  .menu-button .tier-icon i { display: block; position: absolute; left: 0; width: 26px; height: 5px; transition: transform .4s cubic-bezier(.2,.9,.2,1), opacity .2s; }
+  .tier-icon i:nth-child(1) { top: 3px; background: var(--pink); }
+  .tier-icon i:nth-child(2) { top: 10px; background: var(--paper); }
+  .tier-icon i:nth-child(3) { top: 17px; background: var(--paper); }
+  .menu-button[aria-expanded="true"] .tier-icon i:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-button[aria-expanded="true"] .tier-icon i:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .menu-button[aria-expanded="true"] .tier-icon i:nth-child(3) { transform: translateY(-7px) rotate(-45deg); background: var(--pink); }
+
+  .header .brand-logo { position: relative; z-index: 3; }
+  body .header nav {
+    display: flex; position: fixed; inset: 0; z-index: 2; margin: 0; border: 0;
+    flex-direction: column; justify-content: flex-end; gap: 0;
+    padding: 88px 0 calc(20px + env(safe-area-inset-bottom, 0px));
+    background: var(--ink); font-size: 16px;
+    visibility: hidden; transition: visibility 0s .45s;
+  }
+  body .header nav.is-open { visibility: visible; transition: none; }
+  body .header nav .nav-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    min-height: 84px; padding: 0 16px; background: #2a2425; color: var(--paper);
+    font: 400 clamp(40px, 12vw, 56px)/1 var(--display); letter-spacing: -.02em; text-transform: uppercase;
+    transform: translateX(-104%); transition: transform .5s cubic-bezier(.2,.9,.2,1), background .2s, color .2s;
+    transition-delay: calc(var(--i) * 70ms);
+  }
+  body .header nav .nav-row:nth-of-type(even) { background: #241f20; transform: translateX(104%); }
+  body .header nav.is-open .nav-row { transform: none; }
+  body .header nav .nav-row:active, body .header nav .nav-row:focus-visible { background: var(--pink); color: #fff; outline: none; }
+  body .header nav .nav-extra { display: flex; }
+  .nav-label { min-width: 0; }
+  .nav-thumb { display: block; flex: none; width: 56px; height: 56px; object-fit: cover; }
+  .nav-filling { display: block; height: 7px; background: var(--paper); transform: scaleX(0); transform-origin: left; transition: transform .45s cubic-bezier(.2,.9,.2,1); }
+  .nav-filling:nth-of-type(even) { background: var(--pink); transform-origin: right; }
+  .header nav.is-open .nav-filling { transform: none; transition-delay: .25s; }
+  .nav-foot { display: grid; gap: 14px; padding: 22px 16px 0; opacity: 0; transform: translateY(16px); transition: opacity .3s, transform .4s cubic-bezier(.2,.9,.2,1); }
+  .header nav.is-open .nav-foot { opacity: 1; transform: none; transition-delay: .35s; }
+  .nav-cta { display: flex; justify-content: space-between; align-items: center; min-height: 56px; padding: 0 20px; border: 0; border-radius: 0; background: var(--pink); color: #fff; font: 800 16px var(--body); cursor: pointer; }
+  .nav-foot p { margin: 0; color: var(--paper); font: 500 15px/1.5 var(--body); }
+  .nav-foot a { color: var(--paper); text-decoration: underline; text-underline-offset: 3px; display: inline-flex; min-height: 44px; align-items: center; }
+  html.menu-open { overflow: hidden; }
+  html.menu-open .sticky-cta { visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body .header nav .nav-row, .nav-filling, .nav-foot, .tier-icon i { transition: none; }
+}

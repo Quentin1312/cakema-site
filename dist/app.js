@@ -76,3 +76,14 @@ const refreshCta=()=>stickyCta.classList.toggle('is-shown',pastHero&&ctaHiders.s
 new IntersectionObserver(([e])=>{pastHero=!e.isIntersecting&&e.boundingClientRect.top<0;refreshCta();}).observe($('.hero'));
 const ctaObserver=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?ctaHiders.add(e.target):ctaHiders.delete(e.target));refreshCta();});
 ['.accord-footer','#livraison','.footer'].forEach(s=>ctaObserver.observe($(s)));
+
+// Menu mobile « coupe de layer cake » : icône en trois couches, liens empilés comme des étages
+const menuNav=$('#navigation');
+menu.insertAdjacentHTML('beforeend','<span class="tier-icon" aria-hidden="true"><i></i><i></i><i></i></span>');
+menu.setAttribute('aria-label','Ouvrir le menu');
+menuNav.insertAdjacentHTML('beforeend','<a href="#etapes" class="nav-extra">Les étapes</a><a href="#questions" class="nav-extra">Questions</a>');
+const menuThumbs=['cakes/mariage-hexagonal.jpeg','emma.png','cakes/framboises.jpeg','cakes/naked-floral.jpeg','cakes/geode-rose.jpeg'];
+[...menuNav.querySelectorAll('a')].forEach((a,i,all)=>{a.classList.add('nav-row');a.style.setProperty('--i',i);a.innerHTML=`<span class="nav-label">${a.textContent}</span><img class="nav-thumb" src="assets/${menuThumbs[i]}" alt="" loading="lazy">`;if(i<all.length-1)a.insertAdjacentHTML('afterend','<i class="nav-filling" aria-hidden="true"></i>');});
+menuNav.insertAdjacentHTML('beforeend','<div class="nav-foot"><button type="button" class="nav-cta">Préparer ma demande <span aria-hidden="true">→</span></button><p>Une question ? <a href="https://www.instagram.com/cake_maaa/" target="_blank" rel="noopener">Écrivez à Emma sur Instagram</a></p></div>');
+menuNav.querySelector('.nav-cta').addEventListener('click',()=>{closeMenu();eventDialog.showModal();});
+new MutationObserver(()=>{const open=menu.getAttribute('aria-expanded')==='true';menu.setAttribute('aria-label',open?'Fermer le menu':'Ouvrir le menu');html.classList.toggle('menu-open',open);}).observe(menu,{attributes:true,attributeFilter:['aria-expanded']});
