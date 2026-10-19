@@ -506,3 +506,4 @@ body #flavour-options .ingredient-sample { width: 58px; height: 58px; }
 /* Brunch : juste le titre, le texte et le bouton */
 .brunch-intro-col > .brunch-intro { margin-top: 0; }
 @media (min-width: 761px) { .brunch { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; padding: 80px var(--gutter); } }
+@media (min-width: 761px) { .brunch { align-items: start; } .brunch h2 { margin-top: -.08em; } }
