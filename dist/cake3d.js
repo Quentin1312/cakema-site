@@ -1,10 +1,10 @@
 const THREE_URL = './assets/vendor/three.module.js';
-const PAL = {
+const PAL = window.cakePalette || {
   biscuit: ['#e3b978', '#4a2c1f', '#a9b26a', '#b98a5e'],
   insert: ['#b51d45', '#efa21f', '#a8652c', '#d6304a'],
   creme: ['#f7efe2', '#6b4330', '#c9a07a', '#c8cf98']
 };
-const FRUIT = [['#b81f45', '#9e1638'], ['#f2b02a', '#e39a17'], ['#8a5220', '#c58a4a'], ['#7a1428', '#b81f45', '#3b1030']];
+const FRUIT = window.cakePalette?.fruit || [['#b81f45', '#9e1638'], ['#f2b02a', '#e39a17'], ['#8a5220', '#c58a4a'], ['#7a1428', '#b81f45', '#3b1030']];
 let seed = 7;
 const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 function shade(hex, k) {
@@ -103,7 +103,7 @@ export async function mountCake(el, recipe) {
     seed = 7;
     base.b = canvasTex(drawSponge(PAL.biscuit[rec.biscuit]));
     base.c = base.t = canvasTex(drawCream(PAL.creme[rec.creme]));
-    base.i = canvasTex(drawInsert(PAL.insert[rec.insert], rec.insert === 0 || rec.insert === 3));
+    base.i = canvasTex(drawInsert(PAL.insert[rec.insert], window.cakePalette ? window.cakePalette.berry[rec.insert] : (rec.insert === 0 || rec.insert === 3)));
   };
   const mat = (k, rx, ry) => { const t = base[k].clone(); t.needsUpdate = true; t.repeat.set(rx, ry); return new THREE.MeshStandardMaterial({ map: t, bumpMap: t, bumpScale: BUMP[k], roughness: ROUGH[k], side: THREE.DoubleSide }); };
 
