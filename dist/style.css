@@ -461,3 +461,28 @@ body .guest-count { font-size: max(14px, 1em); }
 .guest-price { grid-column: 1 / -1; width: 100%; max-width: none; margin: 10px 0 0; font: 500 15px/1.45 var(--body); color: var(--ink); }
 .guest-price strong { font-weight: 800; color: var(--pink-ink); }
 .faq-list details > p strong { font-weight: 800; }
+
+/* ============ Section brunch ============ */
+.brunch { position: relative; isolation: isolate; overflow: hidden; padding: 64px var(--gutter) 56px; background: var(--ink); color: var(--paper); }
+.brunch h2 { margin: 16px 0 0; color: var(--paper); }
+.brunch h2 span { color: var(--pink); display: block; }
+.brunch .section-index { color: var(--pale); }
+.brunch-intro { max-width: 34em; margin: 20px 0 0; font: 500 17px/1.6 var(--body); }
+.brunch-menu { display: grid; gap: 28px; margin: 40px 0 0; }
+.brunch-menu h3 { margin: 0 0 8px; font: 400 34px/1 var(--display); text-transform: uppercase; color: var(--pink); }
+.brunch-menu p { margin: 0; font: 400 16px/1.6 var(--body); max-width: 30em; }
+.brunch-foot { display: grid; gap: 22px; margin: 40px 0 0; padding-top: 28px; border-top: 6px solid var(--pink); }
+.brunch-foot p { margin: 0; font: 500 16px/1.6 var(--body); max-width: 36em; }
+.brunch-foot .action-link { justify-self: start; border: 0; cursor: pointer; }
+@media (max-width: 760px) { .brunch-foot .action-link { justify-self: stretch; width: 100%; } }
+@media (min-width: 761px) {
+  .brunch { padding: 96px var(--gutter) 88px; }
+  .brunch-menu { grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .brunch-foot { grid-template-columns: 1fr auto; align-items: center; }
+}
+.brunch::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: .16; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+/* menu mobile : 6 couches désormais */
+@media (max-width: 760px) { body .header nav .nav-row { min-height: 72px; } }
+.brunch-foot .action-link { background: var(--pink); color: #fff; border-color: var(--pink); }
+.brunch-foot .action-link:hover { background: var(--paper); color: var(--ink); }

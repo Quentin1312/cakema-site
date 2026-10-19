@@ -63,7 +63,7 @@ $('#recipe-size-range')?.addEventListener('input',e=>setGuestCount(e.target.valu
 $('#guests').addEventListener('input',e=>{const n=+e.target.value;if(n>=15&&n<=300)setGuestCount(n);});
 $('#guests').addEventListener('change',e=>setGuestCount(e.target.value));
 $('#event-date').min=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());$('#event-date').addEventListener('change',()=>$('#message-result').hidden=true);$('#occasion').addEventListener('change',()=>$('#message-result').hidden=true);
-function makeRequest(){const date=$('#event-date').value;const when=date?' le '+new Intl.DateTimeFormat('fr-FR',{dateStyle:'long'}).format(new Date(date+'T12:00:00')):'';const event=['un mariage','un anniversaire','un événement d’entreprise','une fête'][$('#occasion').selectedIndex];return `Bonjour Emma ! Je prépare ${event}${when} pour ${$('#guests').value} personnes. J’aimerais un gâteau de ${recipe.tiers} étage${recipe.tiers>1?'s':''} avec : ${groups[0].options[recipe.biscuit][1]}, ${groups[1].options[recipe.insert][1]} et ${groups[2].options[recipe.creme][1]}. Pourrions-nous imaginer le décor ensemble ?`;}
+function makeRequest(){const date=$('#event-date').value;const when=date?' le '+new Intl.DateTimeFormat('fr-FR',{dateStyle:'long'}).format(new Date(date+'T12:00:00')):'';const event=['un mariage','un anniversaire','un événement d’entreprise','une fête','un brunch'][$('#occasion').selectedIndex];if(event==='un brunch')return `Bonjour Emma ! J’organise un brunch${when} pour ${$('#guests').value} personnes. Pourrions-nous en parler pour composer la formule ensemble ?`;return `Bonjour Emma ! Je prépare ${event}${when} pour ${$('#guests').value} personnes. J’aimerais un gâteau de ${recipe.tiers} étage${recipe.tiers>1?'s':''} avec : ${groups[0].options[recipe.biscuit][1]}, ${groups[1].options[recipe.insert][1]} et ${groups[2].options[recipe.creme][1]}. Pourrions-nous imaginer le décor ensemble ?`;}
 $('#event-panel').addEventListener('submit',async e=>{e.preventDefault();if(!e.target.reportValidity())return;const text=makeRequest();$('#message-text').value=text;let copied=false;try{await navigator.clipboard.writeText(text);copied=true;}catch{}$('#message-status').textContent=copied?'Votre demande est copiée. Collez-la dans la conversation avec Emma.':'Copiez votre demande ci-dessous, puis ouvrez Instagram.';$('#message-result').hidden=false;if(!copied){$('#message-text').focus();$('#message-text').select();}});
 renderPalette();updateRecipe();
 
@@ -82,7 +82,7 @@ const menuNav=$('#navigation');
 menu.insertAdjacentHTML('beforeend','<span class="tier-icon" aria-hidden="true"><i></i><i></i><i></i></span>');
 menu.setAttribute('aria-label','Ouvrir le menu');
 menuNav.insertAdjacentHTML('beforeend','<a href="#etapes" class="nav-extra">Les étapes</a><a href="#questions" class="nav-extra">Questions</a>');
-const menuThumbs=['cakes/mariage-hexagonal.jpeg','emma.webp','cakes/framboises.jpeg','cakes/naked-floral.jpeg','cakes/geode-rose.jpeg'];
+const menuThumbs=['cakes/mariage-hexagonal.jpeg','emma.webp','cakes/framboises.jpeg','brunch-thumb.webp','cakes/naked-floral.jpeg','cakes/geode-rose.jpeg'];
 [...menuNav.querySelectorAll('a')].forEach((a,i,all)=>{a.classList.add('nav-row');a.style.setProperty('--i',i);a.innerHTML=`<span class="nav-label">${a.textContent}</span><img class="nav-thumb" src="assets/${menuThumbs[i]}" alt="" loading="lazy">`;if(i<all.length-1)a.insertAdjacentHTML('afterend','<i class="nav-filling" aria-hidden="true"></i>');});
 menuNav.insertAdjacentHTML('beforeend','<div class="nav-foot"><button type="button" class="nav-cta">Préparer ma demande <span aria-hidden="true">→</span></button><p>Une question ? <a href="https://www.instagram.com/cake_maaa/" target="_blank" rel="noopener">Écrivez à Emma sur Instagram</a></p></div>');
 menuNav.querySelector('.nav-cta').addEventListener('click',()=>{closeMenu();eventDialog.showModal();});
@@ -107,3 +107,9 @@ const euros=v=>new Intl.NumberFormat('fr-FR',{maximumFractionDigits:0}).format(v
 const refreshPrice=()=>{const n=Math.max(15,Math.min(300,+$('#recipe-guests').value||15));priceOut.innerHTML=`Environ <strong>${euros(n*7)} à ${euros(n*8)}</strong> pour ${n} personnes (7 à 8\u00a0€ la part, selon les saveurs et le décor).`;};
 ['#recipe-guests','#recipe-size-range','#guests'].forEach(sel=>{$(sel).addEventListener('input',refreshPrice);$(sel).addEventListener('change',refreshPrice);});
 refreshPrice();
+
+// Section brunch : ouvre la demande avec l'occasion « Brunch »
+$('#open-brunch').addEventListener('click',()=>{$('#occasion').value='Brunch';$('#message-result').hidden=true;eventDialog.showModal();});
+const syncRecipeLine=()=>{$('.event-recipe').hidden=$('#occasion').value==='Brunch';};
+$('#occasion').addEventListener('change',syncRecipeLine);$('#open-brunch').addEventListener('click',syncRecipeLine);
+document.querySelectorAll('#open-event,#open-contact,#open-header').forEach(b=>b.addEventListener('click',()=>{if($('#occasion').value==='Brunch')$('#occasion').value='Mariage';syncRecipeLine();}));

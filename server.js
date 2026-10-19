@@ -7,7 +7,7 @@ const root = fileURLToPath(new URL('./dist/', import.meta.url));
 const mime = {
   '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8', '.jpeg': 'image/jpeg', '.jpg': 'image/jpeg',
-  '.png': 'image/png', '.svg': 'image/svg+xml', '.glb': 'model/gltf-binary',
+  '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.mp4': 'video/mp4', '.webm': 'video/webm', '.glb': 'model/gltf-binary',
   '.ttf': 'font/ttf', '.woff2': 'font/woff2'
 };
 
