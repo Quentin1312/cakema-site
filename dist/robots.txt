@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://quentin1312.github.io/cakema-site/sitemap.xml

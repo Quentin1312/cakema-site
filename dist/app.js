@@ -17,11 +17,14 @@ const ring=$('.cake-ring'),carousel=$('.carousel-stage');
 const motion={angle:0,velocity:reduced?0:-2.4,target:null};
 let carouselPaused=false,dragging=false,dragAngle=0,startX=0,lastX=0,lastMoveAt=0,dragVelocity=0,moved=false,activePiece=-1,ringVisible=false,lastFrame=0,autoDirection=-1,keyboardMode=false,returnFocus=null;
 const position=$('.piece-position'),category=$('#piece-category'),pieceName=$('#piece-name');
-function openPhoto(i){const [file,name]=pieces[i];returnFocus=document.activeElement;const viewer=$('.image-viewer');viewer.querySelector('img').src=`assets/cakes/${file}.jpeg`;viewer.querySelector('img').alt=name;viewer.querySelector('p').textContent=name;viewer.hidden=false;html.style.overflow='hidden';$('.close-viewer').focus();}
+// Texte alternatif descriptif : nom de la création + type de gâteau, pour la recherche d’images
+const altTypes={Mariage:'gâteau de mariage',Anniversaire:'gâteau d’anniversaire','Événement':'gâteau d’événement'};
+function pieceAlt(i){const [,name,cat]=pieces[i];return `${name}, ${altTypes[cat]||'gâteau'} Cake’Ma à Aurillac`;}
+function openPhoto(i){const [file,name]=pieces[i];returnFocus=document.activeElement;const viewer=$('.image-viewer');viewer.querySelector('img').src=`assets/cakes/${file}.webp`;viewer.querySelector('img').alt=pieceAlt(i);viewer.querySelector('p').textContent=name;viewer.hidden=false;html.style.overflow='hidden';$('.close-viewer').focus();}
 function closePhoto(){if($('.image-viewer').hidden)return;$('.image-viewer').hidden=true;html.style.overflow='';returnFocus?.focus();}
 function aimAt(target){motion.target=target;if(reduced){motion.angle=target;motion.target=null;motion.velocity=0;paintRing();}}
 const shortTurn=n=>((n+180)%360+360)%360-180;
-pieces.forEach(([file,name],i)=>{const c=document.createElement('div');c.className='ring-card';c.innerHTML=`<button type="button" aria-label="Agrandir : ${name}"><img src="assets/cakes/${file}.jpeg" alt="${name}" width="210" height="278" loading="eager" decoding="async" fetchpriority="low" draggable="false"></button>`;c.querySelector('button').addEventListener('click',e=>{if(moved){e.preventDefault();return;}if(i!==activePiece){aimAt(motion.angle+shortTurn(-i*30-motion.angle));return;}openPhoto(i);});ring.append(c);});
+pieces.forEach(([file,name],i)=>{const c=document.createElement('div');c.className='ring-card';c.innerHTML=`<button type="button" aria-label="Agrandir : ${name}"><img src="assets/cakes/${file}-420.webp" alt="${pieceAlt(i)}" width="210" height="278" loading="eager" decoding="async" fetchpriority="low" draggable="false"></button>`;c.querySelector('button').addEventListener('click',e=>{if(moved){e.preventDefault();return;}if(i!==activePiece){aimAt(motion.angle+shortTurn(-i*30-motion.angle));return;}openPhoto(i);});ring.append(c);});
 const cards=[...ring.children],cardButtons=cards.map(c=>c.querySelector('button'));
 const norm=n=>(n%12+12)%12;
 function paintRing(){ring.style.transform=`rotateY(${motion.angle}deg)`;const idx=norm(Math.round(-motion.angle/30));if(idx===activePiece)return;activePiece=idx;position.textContent=`${String(idx+1).padStart(2,'0')} / 12`;category.textContent=pieces[idx][2];pieceName.textContent=pieces[idx][1];cardButtons.forEach((b,i)=>{b.tabIndex=i===idx?0:-1;cards[i].setAttribute('aria-hidden',String(i!==idx));});}
@@ -90,7 +93,7 @@ const menuNav=$('#navigation');
 menu.insertAdjacentHTML('beforeend','<span class="tier-icon" aria-hidden="true"><i></i><i></i><i></i></span>');
 menu.setAttribute('aria-label','Ouvrir le menu');
 menuNav.insertAdjacentHTML('beforeend','<a href="#etapes" class="nav-extra">Les étapes</a><a href="#questions" class="nav-extra">Questions</a>');
-const menuThumbs=['cakes/mariage-hexagonal.jpeg','emma.webp','cakes/framboises.jpeg','brunch-thumb.webp','cakes/naked-floral.jpeg','cakes/geode-rose.jpeg'];
+const menuThumbs=['cakes/mariage-hexagonal-420.webp','emma.webp','cakes/framboises-420.webp','brunch-thumb.webp','cakes/naked-floral-420.webp','cakes/geode-rose-420.webp'];
 [...menuNav.querySelectorAll('a')].forEach((a,i,all)=>{a.classList.add('nav-row');a.style.setProperty('--i',i);a.innerHTML=`<span class="nav-label">${a.textContent}</span><img class="nav-thumb" src="assets/${menuThumbs[i]}" alt="" loading="lazy">`;if(i<all.length-1)a.insertAdjacentHTML('afterend','<i class="nav-filling" aria-hidden="true"></i>');});
 menuNav.insertAdjacentHTML('beforeend','<div class="nav-foot"><button type="button" class="nav-cta">Préparer ma demande <span aria-hidden="true">→</span></button><p>Une question ? <a href="https://www.instagram.com/cake_maaa/" target="_blank" rel="noopener">Écrivez à Emma sur Instagram</a></p></div>');
 menuNav.querySelector('.nav-cta').addEventListener('click',()=>{closeMenu();eventDialog.showModal();});
