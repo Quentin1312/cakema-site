@@ -476,105 +476,24 @@ body #flavour-options .ingredient-sample { width: 58px; height: 58px; }
 @media (max-width: 760px) { .sticky-cta { display: none; } .footer { padding-bottom: 22px; } }
 .ingredient-sample img[src*="photos/"] { object-fit: cover; }
 
-/* ============ Brunch : on coupe entre le sucré et le salé ============ */
-.brunch { background: var(--ink); color: var(--paper); padding-top: 52px; }
-.brunch-head { padding: 0 var(--gutter); display: grid; gap: 14px; }
-.brunch h2 { font-size: clamp(44px, 5vw, 80px); line-height: 1; letter-spacing: -.01em; color: var(--paper); }
+/* ============ Brunch : section classique, la carte en deux colonnes ============ */
+.brunch { display: grid; gap: 40px; padding: 64px var(--gutter); background: var(--ink); color: var(--paper); }
+.brunch h2 { font-size: clamp(48px, 5.4vw, 84px); line-height: 1; color: var(--paper); }
 .brunch h2 span { color: var(--pink); }
-.brunch-intro { max-width: 34em; font: 400 16px/1.6 var(--body); color: #e9dfe3; }
-.brunch-split { --cut: 50%; --ease: cubic-bezier(.2, .9, .2, 1); position: relative; display: grid; grid-template-columns: var(--cut) minmax(0, 1fr); height: 460px; margin-top: 32px; user-select: none; -webkit-user-select: none; transition: grid-template-columns .55s var(--ease); }
-.brunch[data-type="sucré"] .brunch-split { --cut: calc(100% - 64px); }
-.brunch[data-type="salé"] .brunch-split { --cut: 64px; }
-.split-panel { position: relative; min-width: 0; overflow: hidden; padding: 26px 22px; cursor: pointer; }
-.split-sucre { background: var(--pink-ink) url("assets/brunch-800.webp") 50% 65% / cover; background-blend-mode: multiply; color: var(--paper); }
-.split-sale { background: var(--paper); color: var(--ink); }
-.split-word { display: block; font: 400 clamp(44px, 9vw, 150px)/.86 var(--display); letter-spacing: -.02em; white-space: nowrap; }
-.split-sale .split-word { color: var(--pink-ink); }
-.split-panel ul { list-style: none; margin: 18px 0 0; padding: 0; max-width: 24em; font: 500 15px/1.5 var(--body); transition: opacity .3s; }
-.split-panel li + li { margin-top: 4px; }
-.brunch[data-type="sucré"] .split-sale ul, .brunch[data-type="salé"] .split-sucre ul { opacity: 0; visibility: hidden; }
-.brunch[data-type="sucré"] .split-sale .split-word, .brunch[data-type="salé"] .split-sucre .split-word { writing-mode: vertical-rl; font-size: 40px; margin: 0 auto; }
-.brunch[data-type="sucré"] .split-sale, .brunch[data-type="salé"] .split-sucre { padding: 22px 0; }
-.split-knife { position: absolute; z-index: 2; top: 0; bottom: 0; left: var(--cut); width: 48px; margin-left: -24px; cursor: grab; touch-action: none; outline: 0; transition: left .55s var(--ease); }
-.knife-blade { position: absolute; top: 0; bottom: 0; left: 50%; width: 3px; margin-left: -1.5px; background: #ece7e2; box-shadow: 0 0 0 1px #1e1a1b40; }
-.knife-handle { position: absolute; top: 50%; left: 50%; width: 24px; height: 104px; margin: -52px 0 0 -12px; border-radius: 12px; background: var(--ink); box-shadow: 0 0 0 2px #ece7e2, 0 10px 24px #0007; transition: transform .2s; }
-.knife-handle::before, .knife-handle::after { content: ""; position: absolute; left: 50%; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--pink); }
-.knife-handle::before { top: 24px; } .knife-handle::after { bottom: 24px; }
-.split-knife:hover .knife-handle { transform: scale(1.06); }
-.split-knife:focus-visible .knife-handle { outline: 3px solid var(--pink); outline-offset: 4px; }
-.brunch-split.is-dragging, .brunch-split.is-dragging .split-knife { transition: none; }
-.brunch-split.is-dragging .split-knife { cursor: grabbing; }
-.brunch-foot { display: grid; gap: 18px; padding: 28px var(--gutter) 44px; }
-.brunch-extra { max-width: 36em; font: 400 14px/1.6 var(--body); color: #cfc2c8; }
-.brunch-cta { display: inline-flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 54px; padding: 14px 22px; border: 0; border-radius: 5px; background: var(--pink); color: #fff; font: 700 14px/1.3 var(--body); transition: background .2s, color .2s; }
-.brunch-cta svg { width: 22px; height: 22px; flex: none; }
+.brunch-intro { max-width: 28em; margin-top: 22px; font: 400 17px/1.65 var(--body); color: #ece3e7; }
+.brunch-extra { max-width: 28em; margin-top: 14px; font: 400 15px/1.6 var(--body); color: #c9bcc2; }
+.brunch-cta { display: inline-flex; align-items: center; gap: 18px; margin-top: 30px; min-height: 54px; padding: 14px 22px; border: 0; border-radius: 5px; background: var(--pink); color: #fff; font: 700 15px/1.3 var(--body); transition: background .2s, color .2s; }
+.brunch-cta svg { width: 22px; height: 22px; }
 .brunch-cta:hover { background: var(--paper); color: var(--ink); }
 .brunch-cta:focus-visible { outline-color: var(--pale); }
-@media (max-width: 760px) {
-  .brunch[data-type="sucré et salé"] .split-panel { padding: 22px 14px; }
-  .brunch[data-type="sucré et salé"] .split-panel ul { font-size: 14px; }
-  .brunch-cta { width: 100%; }
-}
+.brunch-menu { display: grid; gap: 32px; align-content: start; padding: 32px 28px; border-radius: 8px; background: var(--paper); color: var(--ink); }
+.brunch-menu h3 { margin: 0 0 12px; font: 400 32px/1 var(--display); letter-spacing: .01em; text-transform: uppercase; color: var(--pink-ink); }
+.brunch-menu ul { list-style: none; margin: 0; padding: 0; }
+.brunch-menu li { font: 500 16px/1.5 var(--body); padding: 6px 0; }
+@media (prefers-reduced-motion: reduce) { .brunch-cta { transition: none; } }
+@media (max-width: 760px) { .brunch-cta { width: 100%; justify-content: space-between; } }
 @media (min-width: 761px) {
-  .brunch { padding-top: 64px; }
-  .brunch-head { grid-template-columns: auto minmax(0, 30em); justify-content: space-between; align-items: end; column-gap: 48px; }
-  .brunch-split { height: 420px; margin-top: 40px; }
-  .split-panel { padding: 34px clamp(28px, 3.5vw, 56px); }
-  .split-panel ul { font-size: 17px; margin-top: 24px; }
-  .brunch-foot { grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: 32px var(--gutter) 56px; }
+  .brunch { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 64px; align-items: center; padding: 88px var(--gutter); }
+  .brunch-menu { grid-template-columns: 1fr 1fr; gap: 40px; padding: 44px 48px; }
 }
-@media (prefers-reduced-motion: reduce) { .brunch-split, .split-knife, .split-panel ul, .knife-handle, .brunch-cta { transition: none; } }
-.split-word { font-size: clamp(44px, 8vw, 120px); }
-@media (max-width: 760px) {
-  .brunch h2 span { display: block; }
-  .brunch-split { height: 400px; }
-  .knife-handle { top: auto; bottom: 28px; margin-top: 0; }
-}
-@media (min-width: 761px) { .brunch-split { height: 400px; } }
-
-/* Brunch v2 : sans filtre rose, deux moitiés claires, carte en tuiles */
-.split-sucre { background: var(--pale); color: var(--ink); }
-.split-sucre .split-word { color: var(--pink-ink); }
-.split-sale { background: var(--paper); color: var(--ink); }
-.split-sale .split-word { color: var(--ink); }
-.split-panel ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; max-width: 640px; margin-top: 22px; }
-.split-panel li + li { margin-top: 0; }
-.split-panel li { display: flex; align-items: center; min-height: 52px; padding: 10px 16px; border-radius: 8px; font: 600 15px/1.3 var(--body); letter-spacing: -.01em; }
-.split-sucre li { background: #fff9; }
-.split-sale li { background: #1e1a1b0d; }
-.knife-blade { background: var(--ink); box-shadow: none; width: 2px; margin-left: -1px; }
-.knife-handle { box-shadow: 0 0 0 2px var(--paper), 0 10px 24px #1e1a1b55; }
-@media (max-width: 760px) {
-  .brunch-split { height: 470px; }
-  .split-panel ul { grid-template-columns: 1fr; gap: 6px; margin-top: 16px; }
-  .split-panel li { min-height: 44px; padding: 8px 12px; font-size: 14px; }
-  .brunch[data-type="sucré et salé"] .split-panel li { min-height: 0; padding: 7px 9px; font-size: 13px; }
-}
-@media (min-width: 761px) { .brunch-split { height: 440px; } }
-/* Sucré ouvert en grand sur ordi : la vraie photo du buffet apparaît dans l'espace libre */
-@media (min-width: 761px) {
-  .split-sucre::after { content: ""; position: absolute; top: 0; right: 64px; bottom: 0; width: 38%; background: url("assets/brunch-800.webp") 50% 60% / cover; opacity: 0; transform: translateX(24px); transition: opacity .45s .15s, transform .55s .15s var(--ease); pointer-events: none; }
-  .brunch[data-type="sucré"] .split-sucre::after { opacity: 1; transform: none; }
-}
-@media (prefers-reduced-motion: reduce) { .split-sucre::after { transition: none; } }
-@media (min-width: 761px) {
-  .split-sucre::after { right: 0; width: 40%; }
-  .brunch[data-type="sucré"] .split-sucre ul { max-width: calc(60% - 56px); }
-}
-
-/* Brunch v3 : plus de liste ni de photo, des gourmandises en 3D */
-.split-sucre::after { content: none; }
-.split-panel { display: flex; flex-direction: column; }
-.split-line { position: relative; z-index: 1; max-width: 22em; margin-top: 14px; font: 500 15px/1.5 var(--body); transition: opacity .3s; }
-.split-3d { position: absolute; left: 0; right: 0; bottom: 0; top: 34%; transition: opacity .35s; }
-.split-3d canvas { pointer-events: none; }
-.brunch[data-type="sucré"] .split-sale :is(.split-line, .split-3d), .brunch[data-type="salé"] .split-sucre :is(.split-line, .split-3d) { opacity: 0; visibility: hidden; }
-.split-word { position: relative; z-index: 1; }
-@media (max-width: 760px) {
-  .brunch-split { height: 430px; }
-  .brunch[data-type="sucré et salé"] .split-line { font-size: 13px; }
-  .split-3d { top: 40%; }
-}
-@media (min-width: 761px) { .brunch-split { height: 420px; } .split-line { font-size: 16px; } .split-3d { top: 22%; } }
-@media (max-width: 760px) { .split-3d { top: 30%; } }
-@media (min-width: 761px) { .split-3d { top: 30%; } }
+@media (max-width: 760px) { .brunch { padding: 52px var(--gutter); gap: 32px; } .brunch-menu { gap: 24px; } .brunch-menu li { padding: 4px 0; } }
