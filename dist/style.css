@@ -497,3 +497,9 @@ body #flavour-options .ingredient-sample { width: 58px; height: 58px; }
   .brunch-menu { grid-template-columns: 1fr 1fr; gap: 40px; padding: 44px 48px; }
 }
 @media (max-width: 760px) { .brunch { padding: 52px var(--gutter); gap: 32px; } .brunch-menu { gap: 24px; } .brunch-menu li { padding: 4px 0; } }
+/* Brunch : plus d'encadré, la carte directement sur le fond */
+.brunch-menu { padding: 0; border-radius: 0; background: none; color: var(--paper); }
+.brunch-menu h3 { color: var(--pink); font-size: 30px; margin-bottom: 14px; }
+.brunch-menu li { color: #ece3e7; padding: 5px 0; }
+@media (max-width: 760px) { .brunch-menu { grid-template-columns: 1fr 1fr; gap: 20px; } .brunch-menu h3 { font-size: 26px; } .brunch-menu li { font-size: 14px; line-height: 1.4; } }
+@media (min-width: 761px) { .brunch-menu { padding: 0; align-self: center; } }
