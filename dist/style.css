@@ -506,3 +506,28 @@ body #flavour-options .ingredient-sample { width: 58px; height: 58px; }
   .brunch-photo { height: auto; min-height: 100%; }
   .brunch-body { padding: 72px var(--gutter) 72px 56px; align-self: center; }
 }
+
+/* Mobile : pas de bouton collant (prend trop de place), donc plus de réserve en bas */
+@media (max-width: 760px) { .sticky-cta { display: none; } .footer { padding-bottom: 22px; } }
+
+/* Brunch sur ordi : section plus basse, photo plus étroite */
+@media (min-width: 761px) {
+  .brunch { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); max-height: 560px; overflow: hidden; }
+  .brunch-photo { max-height: 560px; }
+  .brunch-body { padding: 48px var(--gutter) 48px 52px; }
+  .brunch h2 { font-size: clamp(42px, 3.8vw, 58px); }
+  .brunch h2 br { display: none; }
+  .brunch h2 span { display: inline; }
+  .brunch-intro { margin-top: 12px; }
+  .brunch-pick { margin-top: 20px; }
+  .brunch-pick legend { float: none; width: auto; margin: 0 6px 0 0; }
+  .brunch-carte { margin-top: 18px; max-width: none; }
+  .brunch[data-type="sucré et salé"] .brunch-carte { grid-template-columns: 1fr 1fr; gap: 0 32px; }
+  .brunch-cta { margin-top: 20px; }
+}
+@media (min-width: 761px) {
+  .brunch { max-height: none; overflow: visible; }
+  .brunch-photo { position: relative; max-height: none; }
+  .brunch-photo img { position: absolute; inset: 0; }
+  .brunch h2 span { margin-left: .22em; }
+}
