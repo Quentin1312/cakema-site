@@ -531,3 +531,4 @@ body #flavour-options .ingredient-sample { width: 58px; height: 58px; }
   .brunch-photo img { position: absolute; inset: 0; }
   .brunch h2 span { margin-left: .22em; }
 }
+.ingredient-sample img[src*="photos/"] { object-fit: cover; }
