@@ -35,3 +35,11 @@ Le formulaire prépare un message à copier ; l’utilisateur l’envoie lui-mê
 ## Assets et licences
 
 Le modèle 3D, le logo et les photographies proviennent des fichiers fournis pour le projet. Aucune licence de réutilisation supplémentaire n’est accordée à ces éléments par ce dépôt. Les licences des dépendances et des polices figurent dans `licenses/`.
+
+## SEO
+
+- Balises title/description, Open Graph (`assets/og-cakema.jpg`), données structurées JSON-LD (Bakery, WebSite, FAQPage) dans `dist/index.html`.
+- `dist/sitemap.xml` et `dist/robots.txt`.
+- Photos des créations en WebP : `assets/cakes/*-420.webp` (présentoir) et `assets/cakes/*.webp` (agrandissement). Les JPEG d’origine restent la source.
+
+**Changement de nom de domaine** : remplacer `https://quentin1312.github.io/cakema-site/` par la nouvelle adresse dans `dist/index.html`, `dist/robots.txt` et `dist/sitemap.xml`, puis mettre à jour l’hébergeur dans `dist/mentions-legales.html`.
