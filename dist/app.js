@@ -137,4 +137,5 @@ knife.addEventListener('pointermove',e=>{if(!knifeDrag)return;knifeMoved=true;cu
 const endDrag=()=>{if(!knifeDrag)return;knifeDrag=false;split.classList.remove('is-knifeDrag');split.style.removeProperty('--cut');setTimeout(()=>{knifeMoved=false;},0);};
 knife.addEventListener('pointerup',endDrag);knife.addEventListener('pointercancel',endDrag);
 knife.addEventListener('keydown',e=>{const i=TYPES.indexOf(brunchSection.dataset.type),k={ArrowLeft:i-1,ArrowDown:i-1,ArrowRight:i+1,ArrowUp:i+1,Home:0,End:2}[e.key];if(k===undefined)return;e.preventDefault();setBrunch(TYPES[Math.max(0,Math.min(2,k))]);});
+const brunchIO=new IntersectionObserver(async es=>{if(!es[0].isIntersecting)return;brunchIO.disconnect();try{const {mountBrunch}=await import('./brunch3d.js?v=20261022e');split.querySelectorAll('.split-panel').forEach(p=>mountBrunch(p.querySelector('.split-3d'),p.dataset.pick));}catch(e){}},{rootMargin:'300px'});brunchIO.observe(split);
 split.querySelectorAll('.split-panel').forEach(p=>p.addEventListener('click',()=>{if(knifeMoved){knifeMoved=false;return;}const t=p.dataset.pick;setBrunch(brunchSection.dataset.type===t?'sucré et salé':t);}));

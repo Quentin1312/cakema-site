@@ -561,3 +561,20 @@ body #flavour-options .ingredient-sample { width: 58px; height: 58px; }
   .split-sucre::after { right: 0; width: 40%; }
   .brunch[data-type="sucré"] .split-sucre ul { max-width: calc(60% - 56px); }
 }
+
+/* Brunch v3 : plus de liste ni de photo, des gourmandises en 3D */
+.split-sucre::after { content: none; }
+.split-panel { display: flex; flex-direction: column; }
+.split-line { position: relative; z-index: 1; max-width: 22em; margin-top: 14px; font: 500 15px/1.5 var(--body); transition: opacity .3s; }
+.split-3d { position: absolute; left: 0; right: 0; bottom: 0; top: 34%; transition: opacity .35s; }
+.split-3d canvas { pointer-events: none; }
+.brunch[data-type="sucré"] .split-sale :is(.split-line, .split-3d), .brunch[data-type="salé"] .split-sucre :is(.split-line, .split-3d) { opacity: 0; visibility: hidden; }
+.split-word { position: relative; z-index: 1; }
+@media (max-width: 760px) {
+  .brunch-split { height: 430px; }
+  .brunch[data-type="sucré et salé"] .split-line { font-size: 13px; }
+  .split-3d { top: 40%; }
+}
+@media (min-width: 761px) { .brunch-split { height: 420px; } .split-line { font-size: 16px; } .split-3d { top: 22%; } }
+@media (max-width: 760px) { .split-3d { top: 30%; } }
+@media (min-width: 761px) { .split-3d { top: 30%; } }
