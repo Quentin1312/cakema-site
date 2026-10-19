@@ -507,3 +507,9 @@ body #flavour-options .ingredient-sample { width: 58px; height: 58px; }
 .brunch-intro-col > .brunch-intro { margin-top: 0; }
 @media (min-width: 761px) { .brunch { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; padding: 80px var(--gutter); } }
 @media (min-width: 761px) { .brunch { align-items: start; } .brunch h2 { margin-top: -.08em; } }
+
+/* Demande : l'occasion et la date, plus une case si la date n'est pas fixée */
+body .event-inputs .event-date-label { grid-column: auto; }
+.no-date { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; min-height: 44px; font: 500 14px/1.4 var(--body); cursor: pointer; }
+.no-date input { width: 20px; height: 20px; margin: 0; accent-color: var(--pink-ink); }
+#event-date:disabled { opacity: .45; }

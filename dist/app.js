@@ -74,7 +74,7 @@ $('#recipe-size-range')?.addEventListener('input',e=>setGuestCount(e.target.valu
 $('#guests').addEventListener('input',e=>{const n=+e.target.value;if(n>=15&&n<=300)setGuestCount(n);});
 $('#guests').addEventListener('change',e=>setGuestCount(e.target.value));
 $('#event-date').min=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Paris',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());$('#event-date').addEventListener('change',()=>$('#message-result').hidden=true);$('#occasion').addEventListener('change',()=>$('#message-result').hidden=true);
-function makeRequest(){const date=$('#event-date').value;const when=date?' le '+new Intl.DateTimeFormat('fr-FR',{dateStyle:'long'}).format(new Date(date+'T12:00:00')):'';const event=['un mariage','un anniversaire','un événement d’entreprise','une fête','un brunch'][$('#occasion').selectedIndex];if(event==='un brunch')return `Bonjour Emma ! J’organise un brunch${when} pour ${$('#guests').value} personnes. Pourrions-nous en parler pour composer la formule ensemble ?`;return `Bonjour Emma ! Je prépare ${event}${when} pour ${$('#guests').value} personnes. J’aimerais un gâteau de ${recipe.tiers} étage${recipe.tiers>1?'s':''} avec : ${groups[0].options[recipe.biscuit][1]}, ${groups[1].options[recipe.insert][1]} et ${groups[2].options[recipe.creme][1]}. Pourrions-nous imaginer le décor ensemble ?`;}
+function makeRequest(){const date=$('#event-date').value;const when=date?' le '+new Intl.DateTimeFormat('fr-FR',{dateStyle:'long'}).format(new Date(date+'T12:00:00')):'';const event=['un mariage','un anniversaire','un événement d’entreprise','une fête','un brunch'][$('#occasion').selectedIndex];const noDate=date?'':' La date n’est pas encore fixée.';if(event==='un brunch')return `Bonjour Emma ! J’organise un brunch${when}.${noDate} Pourrions-nous en parler pour composer la formule ensemble ?`;return `Bonjour Emma ! Je prépare ${event}${when} pour ${$('#guests').value} personnes. J’aimerais un gâteau de ${recipe.tiers} étage${recipe.tiers>1?'s':''} avec : ${groups[0].options[recipe.biscuit][1]}, ${groups[1].options[recipe.insert][1]} et ${groups[2].options[recipe.creme][1]}.${noDate} Pourrions-nous imaginer le décor ensemble ?`;}
 $('#event-panel').addEventListener('submit',async e=>{e.preventDefault();if(!e.target.reportValidity())return;const text=makeRequest();$('#message-text').value=text;let copied=false;try{await navigator.clipboard.writeText(text);copied=true;}catch{}$('#message-status').textContent=copied?'Votre demande est copiée. Collez-la dans la conversation avec Emma.':'Copiez votre demande ci-dessous, puis ouvrez Instagram.';$('#message-result').hidden=false;if(!copied){$('#message-text').focus();$('#message-text').select();}});
 renderPalette();updateRecipe();
 
@@ -86,7 +86,7 @@ const ctaHiders=new Set();let pastHero=false;
 const refreshCta=()=>stickyCta.classList.toggle('is-shown',pastHero&&ctaHiders.size===0);
 new IntersectionObserver(([e])=>{pastHero=!e.isIntersecting&&e.boundingClientRect.top<0;refreshCta();}).observe($('.hero'));
 const ctaObserver=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?ctaHiders.add(e.target):ctaHiders.delete(e.target));refreshCta();});
-['.accord-footer','#livraison','.footer'].forEach(s=>ctaObserver.observe($(s)));
+['.accord-footer','.footer'].forEach(s=>ctaObserver.observe($(s)));
 
 // Menu mobile « coupe de layer cake » : icône en trois couches, liens empilés comme des étages
 const menuNav=$('#navigation');
@@ -124,3 +124,6 @@ $('#open-brunch').addEventListener('click',()=>{$('#occasion').value='Brunch';$(
 const syncRecipeLine=()=>{$('.event-recipe').hidden=$('#occasion').value==='Brunch';};
 $('#occasion').addEventListener('change',syncRecipeLine);$('#open-brunch').addEventListener('click',syncRecipeLine);
 document.querySelectorAll('#open-event,#open-contact,#open-header').forEach(b=>b.addEventListener('click',()=>{if($('#occasion').value==='Brunch')$('#occasion').value='Mariage';syncRecipeLine();}));
+
+// Pas encore de date : la case remplace le champ date
+$('#no-date').addEventListener('change',e=>{const d=$('#event-date');d.disabled=e.target.checked;d.required=!e.target.checked;if(e.target.checked)d.value='';$('#message-result').hidden=true;});
