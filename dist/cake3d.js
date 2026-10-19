@@ -1,8 +1,8 @@
 const THREE_URL = './assets/vendor/three.module.js';
 const PAL = {
-  biscuit: ['#e3b978', '#4a2c1f', '#a9b26a', '#e9cf78'],
-  insert: ['#b51d45', '#efa21f', '#a8652c', '#7d1830'],
-  creme: ['#f7efe2', '#f0e4cc', '#c9a07a', '#f1c4cf']
+  biscuit: ['#e3b978', '#4a2c1f', '#a9b26a', '#b98a5e'],
+  insert: ['#b51d45', '#efa21f', '#a8652c', '#d6304a'],
+  creme: ['#f7efe2', '#6b4330', '#c9a07a', '#c8cf98']
 };
 const FRUIT = [['#b81f45', '#9e1638'], ['#f2b02a', '#e39a17'], ['#8a5220', '#c58a4a'], ['#7a1428', '#b81f45', '#3b1030']];
 let seed = 7;

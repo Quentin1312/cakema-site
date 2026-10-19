@@ -456,3 +456,8 @@ body .guest-count { font-size: max(14px, 1em); }
   body .header-contact { min-height: 44px; }
   body .footer-bottom a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
 }
+
+/* Estimation de prix en direct (7 à 8 € la part) */
+.guest-price { grid-column: 1 / -1; width: 100%; max-width: none; margin: 10px 0 0; font: 500 15px/1.45 var(--body); color: var(--ink); }
+.guest-price strong { font-weight: 800; color: var(--pink-ink); }
+.faq-list details > p strong { font-weight: 800; }
