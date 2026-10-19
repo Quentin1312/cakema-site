@@ -503,3 +503,6 @@ body #flavour-options .ingredient-sample { width: 58px; height: 58px; }
 .brunch-menu li { color: #ece3e7; padding: 5px 0; }
 @media (max-width: 760px) { .brunch-menu { grid-template-columns: 1fr 1fr; gap: 20px; } .brunch-menu h3 { font-size: 26px; } .brunch-menu li { font-size: 14px; line-height: 1.4; } }
 @media (min-width: 761px) { .brunch-menu { padding: 0; align-self: center; } }
+/* Brunch : juste le titre, le texte et le bouton */
+.brunch-intro-col > .brunch-intro { margin-top: 0; }
+@media (min-width: 761px) { .brunch { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; padding: 80px var(--gutter); } }
