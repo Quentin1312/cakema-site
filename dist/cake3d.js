@@ -134,20 +134,28 @@ export async function mountCake(el, recipe) {
     const put = (geo, mat, x, y, z, sx, sy = sx, sz = sx, rot = [0, rnd() * 6, 0]) => { const m = new THREE.Mesh(geo, mat); m.scale.set(sx, sy, sz); m.position.set(x, y, z); m.rotation.set(...rot); m.castShadow = true; L.deco.add(m); return m; };
     const back = (spread = 1) => { const a = Math.PI + (rnd() - 0.5) * 2.4 * spread, rr = R * (0.3 + rnd() * 0.5); return [Math.sin(a) * rr, Math.cos(a) * rr]; };
     const anywhere = () => { const a = TS + 0.15 + rnd() * (TL - 0.3), rr = R * Math.sqrt(rnd()) * 0.92; return [Math.sin(a) * rr, Math.cos(a) * rr]; };
+    // nappage sur le dessus (n gouttes le long du bord, 0 = aucune)
     const drips = (col, n, rough) => {
       const pool = M(col, 0.45); pool.envMapIntensity = 0.25; pool.color.multiplyScalar(0.62); put(new THREE.CylinderGeometry(R * 0.86, R * 0.86, 1, 96, 1, false, TS, TL), pool, 0, top + 0.006, 0, 1, 0.012, 1, [0, 0, 0]);
       for (let i = 0; i < n; i++) { const a = TS + 0.2 + (i + rnd() * 0.6) / n * (TL - 0.4), len = 0.12 + rnd() * 0.22; put(cylGeo, M(col, rough), Math.sin(a) * R * 1.005, top - len / 2 + 0.01, Math.cos(a) * R * 1.005, 0.024, len, 0.024); put(sphere, M(col, rough), Math.sin(a) * R * 1.005, top - len + 0.01, Math.cos(a) * R * 1.005, 0.03); }
     };
-    if (kind === 'fraise') for (let i = 0; i < 9; i++) { const [x, z] = back(); put(sphere, M('#d42a3a', 0.3), x, top + 0.09, z, 0.085, 0.11, 0.085); put(sphere, leafMat, x, top + 0.195, z, 0.055, 0.014, 0.055); }
-    else if (kind === 'framboise') for (let i = 0; i < 8; i++) { const [x, z] = back(); const mat = M('#b8173f', 0.45); [[0, 0, 0], [0.03, 0, 0], [-0.03, 0, 0], [0, 0, 0.03], [0, 0, -0.03], [0.015, 0.03, 0.015], [-0.015, 0.03, -0.015], [0, 0.055, 0]].forEach(([dx, dy, dz]) => put(sphere, mat, x + dx * 1.3, top + 0.04 + dy * 1.3, z + dz * 1.3, 0.032)); }
-    else if (kind === 'passion') for (let i = 0; i < 6; i++) { const [x, z] = back(); put(cylGeo, M('#5b2340', 0.6), x, top + 0.015, z, 0.105, 0.03, 0.105); put(cylGeo, M('#f2b12a', 0.2), x, top + 0.032, z, 0.09, 0.006, 0.09); for (let k = 0; k < 5; k++) put(sphere, M('#1e1a1b', 0.3), x + (rnd() - 0.5) * 0.11, top + 0.038, z + (rnd() - 0.5) * 0.11, 0.011); }
+    const balls = (col, n, size) => { for (let i = 0; i < n; i++) { const [x, z] = back(); const r = size * (0.85 + rnd() * 0.3); put(sphere, M(col, 0.35), x, top + r * 0.85, z, r); } };
+    const bowlGeo = new THREE.SphereGeometry(1, 24, 12, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2);
+    if (kind === 'fraise') balls('#d8283a', 10, 0.075);
+    else if (kind === 'framboise') balls('#c2185b', 12, 0.055);
+    else if (kind === 'passion') for (let i = 0; i < 5; i++) {
+      const [x, z] = back(), r = 0.1, shell = new THREE.MeshStandardMaterial({ color: '#5b2340', roughness: 0.6, side: THREE.DoubleSide });
+      put(bowlGeo, shell, x, top + r, z, r, r, r, [0, 0, 0]);
+      put(cylGeo, M('#f6b818', 0.25), x, top + r + 0.002, z, r * 0.96, 0.008, r * 0.96, [0, 0, 0]);
+      for (let k = 0; k < 7; k++) { const a = rnd() * 6.28, d = rnd() * r * 0.7; put(sphere, M('#1e1a1b', 0.3), x + Math.cos(a) * d, top + r + 0.007, z + Math.sin(a) * d, 0.011, 0.006, 0.014); }
+    }
     else if (kind === 'mangue') for (let i = 0; i < 16; i++) { const [x, z] = back(); put(boxGeo, M('#f7a51c', 0.3), x, top + 0.04, z, 0.075, 0.07, 0.075, [rnd(), rnd() * 3, rnd()]); }
     else if (kind === 'coco') { const mat = M('#ffffff', 0.9); for (let i = 0; i < 420; i++) { const [x, z] = anywhere(); put(boxGeo, mat, x, top + 0.008, z, 0.045, 0.008, 0.012); } }
     else if (kind === 'oreo') for (let i = 0; i < 5; i++) { const [x, z] = back(); const up = i % 2 === 0, rot = up ? [Math.PI / 2.3, rnd() * 6, 0] : [0, 0, 0], y = up ? top + 0.08 : top + 0.025; [[-0.021, '#2b1f1c', 0.012], [0, '#f6f1e8', 0.012], [0.021, '#2b1f1c', 0.012]].forEach(([d, c, h]) => { const m = put(cylGeo, M(c, 0.7), x, y, z, 0.1, h * 1.3, 0.1, rot); m.translateY(d); }); }
     else if (kind === 'kinder') for (let i = 0; i < 6; i++) { const [x, z] = back(); const rot = [0, rnd() * 6, i % 2 ? 0 : 0.9]; const m = put(boxGeo, M('#d9a066', 0.6), x, top + 0.06, z, 0.23, 0.055, 0.08, rot); const c = put(boxGeo, M('#4a2a18', 0.4), x, top + 0.06, z, 0.215, 0.016, 0.065, rot); c.translateY(0.034); }
-    else if (kind === 'nutella') { for (let i = 0; i < 9; i++) { const [x, z] = back(); put(sphere, M('#3a1a0c', 0.15), x, top + 0.02, z, 0.11, 0.04, 0.11); } drips('#3a1a0c', 12, 0.15); }
-    else if (kind === 'coulis-passion') drips('#e08600', 14, 0.1);
-    else if (kind === 'coulis-framboise') drips('#9e0826', 14, 0.1);
+    else if (kind === 'nutella') drips('#3a1a0c', 0, 0.2);
+    else if (kind === 'coulis-passion') drips('#e08600', 0, 0.1);
+    else if (kind === 'coulis-framboise') drips('#9e0826', 0, 0.1);
   };
   const applyMats = L => {
     [L.side, ...L.planes].forEach(m => { const mm = m.material; if (mm && mm.dispose) { mm.map && mm.map.dispose(); mm.dispose(); } });
