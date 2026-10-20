@@ -560,3 +560,8 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
   #etapes .cupcake-deco svg { top: -60px; bottom: auto; }
   #brunch .cupcake-deco svg { bottom: -40px; }
 }
+/* Étapes : le cupcake pend à l'envers depuis le haut de la section */
+#etapes .cupcake-deco svg { top: -150px; bottom: auto; right: 6%; transform: rotate(180deg); }
+@media (min-width: 761px) { #etapes .cupcake-deco svg { top: -190px; bottom: auto; right: 34%; } }
+#etapes .cupcake-deco svg { top: -80px; right: -60px; }
+@media (min-width: 761px) { #etapes .cupcake-deco svg { top: -120px; right: 18%; } }
