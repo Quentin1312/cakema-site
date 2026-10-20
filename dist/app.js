@@ -9,9 +9,11 @@ $('#navigation').addEventListener('click',e=>{if(e.target.closest('a'))closeMenu
 
 const heroVideo=$('#hero-video');
 if(reduced){heroVideo.removeAttribute('autoplay');heroVideo.pause();}
-const pieces=[['mariage-hexagonal','Hexagone dentelle','Mariage'],['naked-floral','Naked cake aux roses','Mariage'],['creme-florale','Couronne de fleurs','Anniversaire'],['fleurs-fuchsia','Volants fuchsia','Mariage'],['dix-huit','Dix-huit, noir et or','Anniversaire'],['geode-rose','Géode rose','Anniversaire'],['framboises','Framboises et volants','Anniversaire'],['chocolat-gourmand','Gourmand chocolat','Événement'],['one-ourson','Premier anniversaire','Anniversaire'],['chateau','Le château','Anniversaire'],['coeur-rouge','Cœur rouge','Événement']];
+const pieces=[['mariage-hexagonal','Hexagone dentelle','Mariage'],['naked-floral','Naked cake aux roses','Mariage'],['creme-florale','Couronne de fleurs','Anniversaire'],['fleurs-fuchsia','Volants fuchsia','Mariage'],['dix-huit','Dix-huit, noir et or','Anniversaire'],['geode-rose','Géode rose','Anniversaire'],['framboises','Framboises et volants','Anniversaire'],['chocolat-gourmand','Gourmand chocolat','Événement'],['one-ourson','Premier anniversaire','Anniversaire'],['chateau','Le château','Anniversaire'],['coeur-rouge','Cœur rouge','Événement'],['noel-cheminee','La cheminée du père Noël','Événement'],['laly','Laly, roses et œillets','Anniversaire'],['framboises-vintage','Vintage aux framboises','Anniversaire'],['vichy-fraises-paquerettes','Vichy, fraises et pâquerettes','Anniversaire'],['ninja','Le ninja','Anniversaire']];
 // Angle entre deux gâteaux du présentoir : suit le nombre de photos
 const STEP=360/pieces.length;
+// plus de gâteaux = cercle plus grand, reculé d'autant pour garder la même taille à l'écran
+let ringPush=0;
 const ring=$('.cake-ring'),carousel=$('.carousel-stage');
 const motion={angle:0,velocity:reduced?0:-2.4,target:null};
 let carouselPaused=false,dragging=false,dragAngle=0,startX=0,lastX=0,lastMoveAt=0,dragVelocity=0,moved=false,activePiece=-1,ringVisible=false,lastFrame=0,autoDirection=-1,keyboardMode=false,returnFocus=null;
@@ -26,8 +28,8 @@ const shortTurn=n=>((n+180)%360+360)%360-180;
 pieces.forEach(([file,name],i)=>{const c=document.createElement('div');c.className='ring-card';c.innerHTML=`<button type="button" aria-label="Agrandir : ${name}"><img src="assets/cakes/${file}-420.webp" alt="${pieceAlt(i)}" width="210" height="278" loading="eager" decoding="async" fetchpriority="low" draggable="false"></button>`;c.querySelector('button').addEventListener('click',e=>{if(moved){e.preventDefault();return;}if(i!==activePiece){aimAt(motion.angle+shortTurn(-i*STEP-motion.angle));return;}openPhoto(i);});ring.append(c);});
 const cards=[...ring.children],cardButtons=cards.map(c=>c.querySelector('button'));
 const norm=n=>(n%pieces.length+pieces.length)%pieces.length;
-function paintRing(){ring.style.transform=`rotateY(${motion.angle}deg)`;const idx=norm(Math.round(-motion.angle/STEP));if(idx===activePiece)return;activePiece=idx;position.textContent=`${String(idx+1).padStart(2,'0')} / ${String(pieces.length).padStart(2,'0')}`;category.textContent=pieces[idx][2];pieceName.textContent=pieces[idx][1];cardButtons.forEach((b,i)=>{b.tabIndex=i===idx?0:-1;cards[i].setAttribute('aria-hidden',String(i!==idx));});}
-function layoutRing(){const radius=innerWidth<=760?410:470;cards.forEach((el,i)=>el.style.transform=`rotateY(${i*STEP}deg) translateZ(${radius}px)`);paintRing();}
+function paintRing(){ring.style.transform=`translateZ(${-ringPush}px) rotateY(${motion.angle}deg)`;const idx=norm(Math.round(-motion.angle/STEP));if(idx===activePiece)return;activePiece=idx;position.textContent=`${String(idx+1).padStart(2,'0')} / ${String(pieces.length).padStart(2,'0')}`;category.textContent=pieces[idx][2];pieceName.textContent=pieces[idx][1];cardButtons.forEach((b,i)=>{b.tabIndex=i===idx?0:-1;cards[i].setAttribute('aria-hidden',String(i!==idx));});}
+function layoutRing(){const base=innerWidth<=760?410:470,radius=Math.max(base,Math.round(pieces.length*232/(2*Math.PI)));ringPush=radius-base;cards.forEach((el,i)=>el.style.transform=`rotateY(${i*STEP}deg) translateZ(${radius}px)`);paintRing();}
 function stepPiece(d){autoDirection=-Math.sign(d);aimAt(Math.round(motion.angle/STEP)*STEP-d*STEP);}
 $('#previous-piece').addEventListener('click',()=>stepPiece(-1));$('#next-piece').addEventListener('click',()=>stepPiece(1));
 carousel.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();keyboardMode=true;stepPiece(e.key==='ArrowRight'?1:-1);}});
