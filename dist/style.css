@@ -642,3 +642,5 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 @media (max-width: 760px) { .deco-petales { display: none; } }
 @media (min-width: 761px) { .deco-petales svg { width: 420px; height: 480px; right: -150px; top: -40px; } }
 @media (min-width: 761px) { .deco-petales svg { right: -80px; } }
+/* Ordi : la promesse passait sur le plateau du gâteau qui tourne ; masquée à l'écran, gardée pour Google et les lecteurs d'écran */
+@media (min-width: 761px) { .hero-promise { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }
