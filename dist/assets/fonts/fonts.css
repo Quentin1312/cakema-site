@@ -3,40 +3,40 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(type-0.ttf) format('truetype');
+  src: url(type-0.woff2) format('woff2'), url(type-0.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(type-1.ttf) format('truetype');
+  src: url(type-1.woff2) format('woff2'), url(type-1.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(type-2.ttf) format('truetype');
+  src: url(type-2.woff2) format('woff2'), url(type-2.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url(type-3.ttf) format('truetype');
+  src: url(type-3.woff2) format('woff2'), url(type-3.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url(type-4.ttf) format('truetype');
+  src: url(type-4.woff2) format('woff2'), url(type-4.ttf) format('truetype');
 }
 @font-face {
   font-family: 'Manrope';
   font-style: normal;
   font-weight: 800;
   font-display: swap;
-  src: url(type-5.ttf) format('truetype');
+  src: url(type-5.woff2) format('woff2'), url(type-5.ttf) format('truetype');
 }
