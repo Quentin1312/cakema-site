@@ -635,3 +635,10 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 .photo-stack .stack-dots i { width: 8px; height: 8px; flex: none; }
 .photo-stack .stack-dots i.on { transform: none; }
 @media (min-width: 761px) { .deco-ruban svg { right: -200px; top: -30px; } }
+/* Section Emma : pétales de rose au trait, éparpillés et coupés par le bord droit */
+#emma .deco-petales { color: var(--pink-ink); opacity: .6; }
+.deco-petales svg { width: 300px; height: 315px; right: -70px; top: -30px; stroke-width: 1.3; }
+@media (min-width: 761px) { .deco-petales svg { width: 400px; height: 420px; right: -110px; top: -50px; } }
+@media (max-width: 760px) { .deco-petales { display: none; } }
+@media (min-width: 761px) { .deco-petales svg { width: 420px; height: 480px; right: -150px; top: -40px; } }
+@media (min-width: 761px) { .deco-petales svg { right: -80px; } }
