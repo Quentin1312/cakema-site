@@ -649,3 +649,5 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 @media (max-width: 760px) { .kicker-long { display: none; } .kicker-short { display: inline; } .hero-kicker { white-space: nowrap; } }
 .hero-kicker { text-shadow: 0 0 6px #1e1a1b, 0 0 14px #1e1a1b, 0 1px 2px #1e1a1b; }
 @media (max-width: 359px) { .hero-kicker { letter-spacing: .06em; font-size: 11px; } }
+/* Mobile : cupcake des étapes poussé dans le coin, plus discret */
+@media (max-width: 760px) { #etapes .cupcake-deco svg { right: -110px; top: -120px; } #etapes .cupcake-deco { opacity: .45; } }
