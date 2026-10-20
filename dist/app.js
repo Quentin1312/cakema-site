@@ -13,6 +13,8 @@ hero.toggleAttribute('auto-rotate',!reduced);
 hero.addEventListener('load',()=>hero.classList.add('loaded'));
 hero.addEventListener('error',()=>{$('.hero-loading').innerHTML='<img src="assets/cakes/mariage-hexagonal.jpeg" alt="Pièce montée Cake’Ma">';});
 const pieces=[['mariage-hexagonal','Hexagone dentelle','Mariage'],['naked-floral','Naked cake aux roses','Mariage'],['creme-florale','Couronne de fleurs','Anniversaire'],['fleurs-fuchsia','Volants fuchsia','Mariage'],['dix-huit','Dix-huit, noir et or','Anniversaire'],['geode-rose','Géode rose','Anniversaire'],['framboises','Framboises et volants','Anniversaire'],['chocolat-gourmand','Gourmand chocolat','Événement'],['one-ourson','Premier anniversaire','Anniversaire'],['chateau','Le château','Anniversaire'],['coeur-rouge','Cœur rouge','Événement']];
+// Angle entre deux gâteaux du présentoir : suit le nombre de photos
+const STEP=360/pieces.length;
 const ring=$('.cake-ring'),carousel=$('.carousel-stage');
 const motion={angle:0,velocity:reduced?0:-2.4,target:null};
 let carouselPaused=false,dragging=false,dragAngle=0,startX=0,lastX=0,lastMoveAt=0,dragVelocity=0,moved=false,activePiece=-1,ringVisible=false,lastFrame=0,autoDirection=-1,keyboardMode=false,returnFocus=null;
@@ -24,12 +26,12 @@ function openPhoto(i){const [file,name]=pieces[i];returnFocus=document.activeEle
 function closePhoto(){if($('.image-viewer').hidden)return;$('.image-viewer').hidden=true;html.style.overflow='';returnFocus?.focus();}
 function aimAt(target){motion.target=target;if(reduced){motion.angle=target;motion.target=null;motion.velocity=0;paintRing();}}
 const shortTurn=n=>((n+180)%360+360)%360-180;
-pieces.forEach(([file,name],i)=>{const c=document.createElement('div');c.className='ring-card';c.innerHTML=`<button type="button" aria-label="Agrandir : ${name}"><img src="assets/cakes/${file}-420.webp" alt="${pieceAlt(i)}" width="210" height="278" loading="eager" decoding="async" fetchpriority="low" draggable="false"></button>`;c.querySelector('button').addEventListener('click',e=>{if(moved){e.preventDefault();return;}if(i!==activePiece){aimAt(motion.angle+shortTurn(-i*30-motion.angle));return;}openPhoto(i);});ring.append(c);});
+pieces.forEach(([file,name],i)=>{const c=document.createElement('div');c.className='ring-card';c.innerHTML=`<button type="button" aria-label="Agrandir : ${name}"><img src="assets/cakes/${file}-420.webp" alt="${pieceAlt(i)}" width="210" height="278" loading="eager" decoding="async" fetchpriority="low" draggable="false"></button>`;c.querySelector('button').addEventListener('click',e=>{if(moved){e.preventDefault();return;}if(i!==activePiece){aimAt(motion.angle+shortTurn(-i*STEP-motion.angle));return;}openPhoto(i);});ring.append(c);});
 const cards=[...ring.children],cardButtons=cards.map(c=>c.querySelector('button'));
-const norm=n=>(n%12+12)%12;
-function paintRing(){ring.style.transform=`rotateY(${motion.angle}deg)`;const idx=norm(Math.round(-motion.angle/30));if(idx===activePiece)return;activePiece=idx;position.textContent=`${String(idx+1).padStart(2,'0')} / ${String(pieces.length).padStart(2,'0')}`;category.textContent=pieces[idx][2];pieceName.textContent=pieces[idx][1];cardButtons.forEach((b,i)=>{b.tabIndex=i===idx?0:-1;cards[i].setAttribute('aria-hidden',String(i!==idx));});}
-function layoutRing(){const radius=innerWidth<=760?410:470;cards.forEach((el,i)=>el.style.transform=`rotateY(${i*30}deg) translateZ(${radius}px)`);paintRing();}
-function stepPiece(d){autoDirection=-Math.sign(d);aimAt(Math.round(motion.angle/30)*30-d*30);}
+const norm=n=>(n%pieces.length+pieces.length)%pieces.length;
+function paintRing(){ring.style.transform=`rotateY(${motion.angle}deg)`;const idx=norm(Math.round(-motion.angle/STEP));if(idx===activePiece)return;activePiece=idx;position.textContent=`${String(idx+1).padStart(2,'0')} / ${String(pieces.length).padStart(2,'0')}`;category.textContent=pieces[idx][2];pieceName.textContent=pieces[idx][1];cardButtons.forEach((b,i)=>{b.tabIndex=i===idx?0:-1;cards[i].setAttribute('aria-hidden',String(i!==idx));});}
+function layoutRing(){const radius=innerWidth<=760?410:470;cards.forEach((el,i)=>el.style.transform=`rotateY(${i*STEP}deg) translateZ(${radius}px)`);paintRing();}
+function stepPiece(d){autoDirection=-Math.sign(d);aimAt(Math.round(motion.angle/STEP)*STEP-d*STEP);}
 $('#previous-piece').addEventListener('click',()=>stepPiece(-1));$('#next-piece').addEventListener('click',()=>stepPiece(1));
 carousel.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();keyboardMode=true;stepPiece(e.key==='ArrowRight'?1:-1);}});
 document.addEventListener('keydown',e=>{if(e.key==='Tab')keyboardMode=true;if(e.key==='Escape'){closeMenu();closePhoto();}if(!$('.image-viewer').hidden&&e.key==='Tab'){e.preventDefault();$('.close-viewer').focus();}});
