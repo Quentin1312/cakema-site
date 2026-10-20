@@ -565,3 +565,25 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 @media (min-width: 761px) { #etapes .cupcake-deco svg { top: -190px; bottom: auto; right: 34%; } }
 #etapes .cupcake-deco svg { top: -80px; right: -60px; }
 @media (min-width: 761px) { #etapes .cupcake-deco svg { top: -120px; right: 18%; } }
+
+/* Fonds clairs : un outil ou un gâteau au trait, coupé par un bord (encre ; rose foncé sur le rose d'Emma) */
+#pieces, #emma, #composition, #questions { position: relative; isolation: isolate; }
+.pastry-deco { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; color: var(--ink); opacity: .4; }
+#emma .pastry-deco { color: var(--pink-ink); opacity: .55; }
+.pastry-deco svg { position: absolute; stroke-width: 1.3; }
+.pastry-deco svg * { vector-effect: non-scaling-stroke; }
+.deco-presentoir svg { width: 220px; height: 226px; left: -70px; bottom: -40px; }
+.deco-poche svg { width: 200px; height: 210px; right: -60px; bottom: -30px; transform: rotate(-35deg); }
+.deco-part svg { width: 200px; height: 190px; right: -80px; top: 40px; }
+.deco-spatule svg { width: 260px; height: 130px; right: -70px; bottom: 10px; transform: rotate(-18deg); }
+@media (min-width: 761px) {
+  .deco-presentoir svg { width: 320px; height: 328px; left: -110px; bottom: -70px; }
+  .deco-poche svg { width: 300px; height: 315px; right: -90px; bottom: -60px; }
+  .deco-part svg { width: 300px; height: 285px; right: auto; left: -130px; top: auto; bottom: 150px; }
+  .deco-spatule svg { width: 380px; height: 190px; right: -110px; bottom: 30px; }
+}
+@media (max-width: 760px) { .deco-part, .deco-spatule { display: none; } .deco-poche svg { bottom: -110px; right: -80px; } }
+@media (min-width: 761px) {
+  .deco-part svg { width: 220px; height: 210px; left: -110px; top: 250px; bottom: auto; }
+  .deco-spatule svg { width: 260px; height: 130px; right: auto; left: 45%; top: 30px; bottom: auto; transform: rotate(-12deg); }
+}
