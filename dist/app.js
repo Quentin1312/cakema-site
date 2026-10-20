@@ -7,11 +7,8 @@ function closeMenu(){menu.setAttribute('aria-expanded','false');$('#navigation')
 menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',open);$('#navigation').classList.toggle('is-open',open);});
 $('#navigation').addEventListener('click',e=>{if(e.target.closest('a'))closeMenu();});
 
-const hero=$('#hero-model');
-hero.setAttribute('auto-rotate-delay','1400');hero.setAttribute('rotation-per-second','8deg');
-hero.toggleAttribute('auto-rotate',!reduced);
-hero.addEventListener('load',()=>hero.classList.add('loaded'));
-hero.addEventListener('error',()=>{$('.hero-loading').innerHTML='<img src="assets/cakes/mariage-hexagonal.jpeg" alt="Pièce montée Cake’Ma">';});
+const heroVideo=$('#hero-video');
+if(reduced){heroVideo.removeAttribute('autoplay');heroVideo.pause();}
 const pieces=[['mariage-hexagonal','Hexagone dentelle','Mariage'],['naked-floral','Naked cake aux roses','Mariage'],['creme-florale','Couronne de fleurs','Anniversaire'],['fleurs-fuchsia','Volants fuchsia','Mariage'],['dix-huit','Dix-huit, noir et or','Anniversaire'],['geode-rose','Géode rose','Anniversaire'],['framboises','Framboises et volants','Anniversaire'],['chocolat-gourmand','Gourmand chocolat','Événement'],['one-ourson','Premier anniversaire','Anniversaire'],['chateau','Le château','Anniversaire'],['coeur-rouge','Cœur rouge','Événement']];
 // Angle entre deux gâteaux du présentoir : suit le nombre de photos
 const STEP=360/pieces.length;
