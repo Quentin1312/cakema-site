@@ -607,3 +607,5 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 .hero-model-wrap .stage-shadow { display: none; }
 /* bords de la vidéo fondus dans le fond : aucune démarcation visible */
 .hero-model-wrap .hero-video { -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 78%, transparent 100%); mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 78%, transparent 100%); }
+/* Poche à douille : à moitié sortie par le bord droit, plus discrète */
+@media (min-width: 761px) { #emma .deco-poche svg { right: -70px; top: 90px; } #emma .pastry-deco { opacity: .35; } }
