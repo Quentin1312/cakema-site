@@ -101,10 +101,12 @@ export async function mountCake(el, recipe) {
   // un jeu de textures par étage (pièce montée : chaque étage a ses saveurs)
   const base = [], texCache = {};
   const layerOf = ti => { const ls = cur.layers || [cur]; return ls[Math.min(ti, ls.length - 1)]; };
-  const tierKey = ti => JSON.stringify(layerOf(ti));
+  const texKey = ti => JSON.stringify(layerOf(ti));
+  // la garniture n'habille que l'étage du haut : elle fait partie de sa clé
+  const tierKey = ti => texKey(ti) + (ti === (cur.tiers || 1) - 1 ? '|' + (cur.extra || 0) : '');
   const buildTextures = () => {
     for (let ti = 0; ti < 3; ti++) {
-      const l = layerOf(ti), k = tierKey(ti);
+      const l = layerOf(ti), k = texKey(ti);
       if (!texCache[k]) {
         seed = 7; const c = canvasTex(drawCream(PAL.creme[l.creme]));
         texCache[k] = { b: canvasTex(drawSponge(PAL.biscuit[l.biscuit])), c, t: c, i: canvasTex(drawInsert(PAL.insert[l.insert], window.cakePalette ? window.cakePalette.berry[l.insert] : (l.insert === 0 || l.insert === 3))) };
@@ -124,6 +126,29 @@ export async function mountCake(el, recipe) {
     im.castShadow = true; im.userData.pearl = true; return im;
   };
 
+  // Garnitures sur le dessus du gâteau (fraise, Oreo, coulis…)
+  const boxGeo = new THREE.BoxGeometry(1, 1, 1), cylGeo = new THREE.CylinderGeometry(1, 1, 1, 24);
+  const garnish = (L, kind) => {
+    seed = 31; const R = L.r, top = L.h;
+    const M = (c, r = 0.4) => new THREE.MeshStandardMaterial({ color: c, roughness: r });
+    const put = (geo, mat, x, y, z, sx, sy = sx, sz = sx, rot = [0, rnd() * 6, 0]) => { const m = new THREE.Mesh(geo, mat); m.scale.set(sx, sy, sz); m.position.set(x, y, z); m.rotation.set(...rot); m.castShadow = true; L.deco.add(m); return m; };
+    const back = (spread = 1) => { const a = Math.PI + (rnd() - 0.5) * 2.4 * spread, rr = R * (0.3 + rnd() * 0.5); return [Math.sin(a) * rr, Math.cos(a) * rr]; };
+    const anywhere = () => { const a = TS + 0.15 + rnd() * (TL - 0.3), rr = R * Math.sqrt(rnd()) * 0.92; return [Math.sin(a) * rr, Math.cos(a) * rr]; };
+    const drips = (col, n, rough) => {
+      const pool = M(col, 0.45); pool.envMapIntensity = 0.25; pool.color.multiplyScalar(0.62); put(new THREE.CylinderGeometry(R * 0.86, R * 0.86, 1, 96, 1, false, TS, TL), pool, 0, top + 0.006, 0, 1, 0.012, 1, [0, 0, 0]);
+      for (let i = 0; i < n; i++) { const a = TS + 0.2 + (i + rnd() * 0.6) / n * (TL - 0.4), len = 0.12 + rnd() * 0.22; put(cylGeo, M(col, rough), Math.sin(a) * R * 1.005, top - len / 2 + 0.01, Math.cos(a) * R * 1.005, 0.024, len, 0.024); put(sphere, M(col, rough), Math.sin(a) * R * 1.005, top - len + 0.01, Math.cos(a) * R * 1.005, 0.03); }
+    };
+    if (kind === 'fraise') for (let i = 0; i < 9; i++) { const [x, z] = back(); put(sphere, M('#d42a3a', 0.3), x, top + 0.09, z, 0.085, 0.11, 0.085); put(sphere, leafMat, x, top + 0.195, z, 0.055, 0.014, 0.055); }
+    else if (kind === 'framboise') for (let i = 0; i < 8; i++) { const [x, z] = back(); const mat = M('#b8173f', 0.45); [[0, 0, 0], [0.03, 0, 0], [-0.03, 0, 0], [0, 0, 0.03], [0, 0, -0.03], [0.015, 0.03, 0.015], [-0.015, 0.03, -0.015], [0, 0.055, 0]].forEach(([dx, dy, dz]) => put(sphere, mat, x + dx * 1.3, top + 0.04 + dy * 1.3, z + dz * 1.3, 0.032)); }
+    else if (kind === 'passion') for (let i = 0; i < 6; i++) { const [x, z] = back(); put(cylGeo, M('#5b2340', 0.6), x, top + 0.015, z, 0.105, 0.03, 0.105); put(cylGeo, M('#f2b12a', 0.2), x, top + 0.032, z, 0.09, 0.006, 0.09); for (let k = 0; k < 5; k++) put(sphere, M('#1e1a1b', 0.3), x + (rnd() - 0.5) * 0.11, top + 0.038, z + (rnd() - 0.5) * 0.11, 0.011); }
+    else if (kind === 'mangue') for (let i = 0; i < 16; i++) { const [x, z] = back(); put(boxGeo, M('#f7a51c', 0.3), x, top + 0.04, z, 0.075, 0.07, 0.075, [rnd(), rnd() * 3, rnd()]); }
+    else if (kind === 'coco') { const mat = M('#ffffff', 0.9); for (let i = 0; i < 420; i++) { const [x, z] = anywhere(); put(boxGeo, mat, x, top + 0.008, z, 0.045, 0.008, 0.012); } }
+    else if (kind === 'oreo') for (let i = 0; i < 5; i++) { const [x, z] = back(); const up = i % 2 === 0, rot = up ? [Math.PI / 2.3, rnd() * 6, 0] : [0, 0, 0], y = up ? top + 0.08 : top + 0.025; [[-0.021, '#2b1f1c', 0.012], [0, '#f6f1e8', 0.012], [0.021, '#2b1f1c', 0.012]].forEach(([d, c, h]) => { const m = put(cylGeo, M(c, 0.7), x, y, z, 0.1, h * 1.3, 0.1, rot); m.translateY(d); }); }
+    else if (kind === 'kinder') for (let i = 0; i < 6; i++) { const [x, z] = back(); const rot = [0, rnd() * 6, i % 2 ? 0 : 0.9]; const m = put(boxGeo, M('#d9a066', 0.6), x, top + 0.06, z, 0.23, 0.055, 0.08, rot); const c = put(boxGeo, M('#4a2a18', 0.4), x, top + 0.06, z, 0.215, 0.016, 0.065, rot); c.translateY(0.034); }
+    else if (kind === 'nutella') { for (let i = 0; i < 9; i++) { const [x, z] = back(); put(sphere, M('#3a1a0c', 0.15), x, top + 0.02, z, 0.11, 0.04, 0.11); } drips('#3a1a0c', 12, 0.15); }
+    else if (kind === 'coulis-passion') drips('#e08600', 14, 0.1);
+    else if (kind === 'coulis-framboise') drips('#9e0826', 14, 0.1);
+  };
   const applyMats = L => {
     [L.side, ...L.planes].forEach(m => { const mm = m.material; if (mm && mm.dispose) { mm.map && mm.map.dispose(); mm.dispose(); } });
     const K = 2.2;
@@ -131,7 +156,9 @@ export async function mountCake(el, recipe) {
     L.planes.forEach(p => { p.material = mat(L.k, L.r * K, L.h * K, L.tier); });
     L.g.children.filter(c => c.userData.pearl).forEach(c => c.material.color.set(PAL.creme[layerOf(L.tier).creme]));
     if (L.deco) {
-      L.deco.children.slice().forEach(c => { if (c.material !== gold && c.material !== leafMat) c.material.dispose(); L.deco.remove(c); });
+      L.deco.children.slice().forEach(c => { if (c.material !== gold && c.material !== leafMat) c.material.dispose(); if (![sphere, boxGeo, cylGeo].includes(c.geometry)) c.geometry.dispose(); L.deco.remove(c); });
+      const kind = (window.cakePalette?.extra || [])[cur.extra || 0] || '';
+      if (kind) garnish(L, kind); else {
       const topIns = layerOf(L.tier).insert, cols = FRUIT[topIns]; seed = 11 + topIns;
       const R = L.r, top = L.h;
       for (let i = 0; i < 11; i++) {
@@ -147,6 +174,7 @@ export async function mountCake(el, recipe) {
         const a = Math.PI + (rnd() - 0.5) * 1.6, rr = R * (0.45 + rnd() * 0.25);
         const m = new THREE.Mesh(sphere, leafMat); m.scale.set(0.09, 0.012, 0.04); m.position.set(Math.sin(a) * rr, top + 0.03, Math.cos(a) * rr);
         m.rotation.set(rnd() * 0.5, rnd() * 3, rnd() * 0.4); m.castShadow = true; L.deco.add(m);
+      }
       }
     }
     L.matKey = tierKey(L.tier);
