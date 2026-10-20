@@ -644,3 +644,8 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 @media (min-width: 761px) { .deco-petales svg { right: -80px; } }
 /* Ordi : la promesse passait sur le plateau du gâteau qui tourne ; masquée à l'écran, gardée pour Google et les lecteurs d'écran */
 @media (min-width: 761px) { .hero-promise { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; } }
+/* Petite ligne du haut : une seule ligne sur mobile, plus lisible sur le gâteau */
+.kicker-short { display: none; }
+@media (max-width: 760px) { .kicker-long { display: none; } .kicker-short { display: inline; } .hero-kicker { white-space: nowrap; } }
+.hero-kicker { text-shadow: 0 0 6px #1e1a1b, 0 0 14px #1e1a1b, 0 1px 2px #1e1a1b; }
+@media (max-width: 359px) { .hero-kicker { letter-spacing: .06em; font-size: 11px; } }
