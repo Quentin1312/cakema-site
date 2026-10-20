@@ -651,3 +651,9 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 @media (max-width: 359px) { .hero-kicker { letter-spacing: .06em; font-size: 11px; } }
 /* Mobile : cupcake des étapes poussé dans le coin, plus discret */
 @media (max-width: 760px) { #etapes .cupcake-deco svg { right: -110px; top: -120px; } #etapes .cupcake-deco { opacity: .45; } }
+/* Texte d'Emma : paragraphes aérés, première phrase en accroche */
+body .atelier-text > p + p { margin-top: 12px; }
+body .atelier-text > p:nth-last-of-type(2) { font-weight: 600; }
+.atelier-note { font-size: 14px; font-weight: 600; color: var(--pink-ink); margin-top: 18px !important; }
+/* Ordi : avec le texte long, la pile de photos reste en haut et accompagne la lecture */
+@media (min-width: 761px) { #emma.atelier { align-items: start; } #emma .photo-stack { position: sticky; top: 110px; } }
