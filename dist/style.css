@@ -621,3 +621,7 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 @media (max-width: 760px) { .photo-stack { width: 84%; margin: 0 auto 40px; } }
 @media (min-width: 761px) { .photo-stack { max-width: 420px; margin-bottom: 30px; } }
 @media (prefers-reduced-motion: reduce) { .photo-stack img { transition: none; } }
+/* points de la pile : plus bas, bien détachés des photos */
+.photo-stack .stack-dots { bottom: -48px; }
+@media (max-width: 760px) { .photo-stack { margin-bottom: 56px; } }
+@media (min-width: 761px) { .photo-stack { margin-bottom: 44px; } }
