@@ -631,3 +631,7 @@ body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 1
 @media (min-width: 761px) { .deco-ruban svg { width: 420px; height: 315px; right: -70px; top: -40px; } }
 @media (max-width: 760px) { .deco-ruban svg { right: -90px; top: -60px; } }
 @media (max-width: 760px) { .deco-ruban { display: none; } }
+/* points : tous de la même taille, seule la couleur indique la photo affichée */
+.photo-stack .stack-dots i { width: 8px; height: 8px; flex: none; }
+.photo-stack .stack-dots i.on { transform: none; }
+@media (min-width: 761px) { .deco-ruban svg { right: -200px; top: -30px; } }
