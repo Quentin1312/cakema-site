@@ -144,7 +144,7 @@ addEventListener('load',()=>{const t=location.hash&&document.querySelector(locat
 // Section Emma : pile de photos. Toutes les 4,5 s (ou au toucher / glisser / flèches), la photo du dessus part sur le côté et repasse sous la pile.
 (()=>{const stack=$('.photo-stack');if(!stack)return;const imgs=[...stack.querySelectorAll('img')];let order=imgs.map((_,i)=>i),busy=false,timer=null,startX=null;
 const dots=document.createElement('div');dots.className='stack-dots';dots.setAttribute('aria-hidden','true');dots.innerHTML=imgs.map(()=>'<i></i>').join('');stack.append(dots);
-const tilt=[[0,0,-2],[10,6,3],[-9,10,-5],[6,14,5],[-4,18,-1]];
+const tilt=[[0,0,-2],[10,6,3],[-9,10,-5],[6,14,5],[-4,18,-1],[8,20,2]];
 const lay=()=>{order.forEach((idx,pos)=>{const im=imgs[idx],[x,y,r]=tilt[Math.min(pos,tilt.length-1)];im.style.zIndex=imgs.length-pos;im.style.setProperty('--x',x+'px');im.style.setProperty('--y',y+'px');im.style.setProperty('--r',r+'deg');im.setAttribute('aria-hidden',String(pos!==0));});[...dots.children].forEach((d,i)=>d.classList.toggle('on',i===order[0]));};
 const next=(dir=1)=>{if(busy)return;busy=true;const top=imgs[order[0]];if(reduced){order.push(order.shift());lay();busy=false;return;}top.classList.add('is-leaving');top.style.setProperty('--x',(dir*115)+'%');top.style.setProperty('--r',(dir*14)+'deg');setTimeout(()=>{top.classList.remove('is-leaving');order.push(order.shift());lay();busy=false;},450);};
 const restart=()=>{clearInterval(timer);if(!reduced)timer=setInterval(()=>{if(!document.hidden&&stackVisible)next(1);},4500);};
