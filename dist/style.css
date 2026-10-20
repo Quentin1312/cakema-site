@@ -546,28 +546,18 @@ body .event-inputs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 body .event-inputs > label { min-width: 0; }
 body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 100%; }
 #event-date { -webkit-appearance: none; appearance: none; min-height: 44px; }
-
-/* Clin d'œil cupcake (contour) dans chaque section : rose sur fond sombre, encre sur fond clair */
-#pieces, #emma, #etapes, #composition, #brunch, #questions { position: relative; }
-.cupcake { position: absolute; z-index: 1; width: 44px; height: 44px; color: var(--ink); transform: rotate(-8deg); pointer-events: none; }
-.cupcake svg { display: block; width: 100%; height: 100%; }
-#etapes .cupcake, #brunch .cupcake { color: var(--pink); }
-#pieces .cupcake { top: 34px; right: var(--gutter); }
-#emma .cupcake { bottom: 22px; right: var(--gutter); }
-#etapes .cupcake { top: 34px; right: var(--gutter); }
-#composition .cupcake { top: 34px; right: var(--gutter); }
-#brunch .cupcake { top: 46px; right: var(--gutter); }
-#questions .cupcake { top: 34px; right: var(--gutter); }
-@media (min-width: 761px) {
-  .cupcake { width: 60px; height: 60px; }
-  #pieces .cupcake, #etapes .cupcake, #questions .cupcake { top: 48px; }
-  #composition .cupcake { top: 130px; }
-  #brunch .cupcake { top: auto; bottom: 30px; }
-  #emma .cupcake { bottom: 30px; }
-}
-@media (max-width: 760px) {
-  .cupcake { width: 36px; height: 36px; }
-  #pieces .cupcake { top: 10px; }
-  #emma { padding-bottom: 72px; }
-  #emma .cupcake { bottom: 20px; }
-}
+/* Grand cupcake au trait, coupé par les bords : une moitié dans une section, l'autre dans la suivante.
+   Rose sur fond sombre, encre sur fond clair. */
+#pieces, #emma, #etapes, #brunch, #questions { position: relative; isolation: isolate; }
+.cupcake-deco { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; color: var(--ink); opacity: .55; }
+#etapes .cupcake-deco, #brunch .cupcake-deco { color: var(--pink); opacity: .75; }
+.cupcake-deco svg { position: absolute; width: 230px; height: 255px; stroke-width: 1.4; }
+.cupcake-deco svg * { vector-effect: non-scaling-stroke; }
+/* même position horizontale de part et d'autre de la frontière : les deux moitiés se raccordent */
+#pieces .cupcake-deco svg, #emma .cupcake-deco svg { right: 6%; }
+#brunch .cupcake-deco svg, #questions .cupcake-deco svg { right: 30%; }
+.cut-bottom svg { bottom: -128px; }
+.cut-top svg { top: -127px; }
+.cut-left svg { left: -120px; top: 50%; margin-top: -128px; transform: rotate(-10deg); }
+@media (min-width: 761px) { .cupcake-deco svg { width: 340px; height: 377px; } .cut-bottom svg { bottom: -189px; } .cut-top svg { top: -188px; } .cut-left svg { left: -170px; margin-top: -188px; } }
+@media (max-width: 760px) { #brunch .cupcake-deco svg, #questions .cupcake-deco svg { right: -40px; } #pieces .cupcake-deco svg, #emma .cupcake-deco svg { right: -40px; } }
