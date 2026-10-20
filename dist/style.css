@@ -513,3 +513,61 @@ body .event-inputs .event-date-label { grid-column: auto; }
 .no-date { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; min-height: 44px; font: 500 14px/1.4 var(--body); cursor: pointer; }
 .no-date input { width: 20px; height: 20px; margin: 0; accent-color: var(--pink-ink); }
 #event-date:disabled { opacity: .45; }
+
+/* ============ Saveurs : choix à gauche sur une ligne, gâteau à droite ============ */
+body .flavour-studio { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; gap: 18px; margin-top: 18px; align-items: center; }
+body .sculpture-stage { grid-column: 1; grid-row: 1; height: 300px; }
+body .sculpture-stage #recipe-canvas { height: 100%; max-width: 420px; margin: auto; }
+.flavour-picks { grid-column: 1; grid-row: 2; min-width: 0; }
+.anchor-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.anchor-row:has(.anchor-extra:not([hidden])) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+body .flavour-anchor { grid-row: auto; grid-column: auto; min-height: 0; padding: 6px 0; justify-content: flex-start; }
+body .flavour-anchor::before, body .flavour-anchor::after { display: none; }
+body .flavour-anchor strong { font-size: clamp(20px, 5.4vw, 40px); }
+.tier-pick { margin-bottom: 18px; }
+.tier-note { max-width: 34em; margin-bottom: 12px; font: 400 15px/1.5 var(--body); }
+.tier-note strong { font-weight: 800; color: var(--pink-ink); }
+.tier-tabs { display: inline-grid; grid-auto-flow: column; grid-auto-columns: minmax(72px, 1fr); padding: 4px; gap: 4px; border-radius: 8px; background: #1e1a1b12; }
+.tier-tabs button { min-height: 44px; padding: 0 16px; border: 0; border-radius: 6px; background: transparent; color: var(--ink); font: 700 15px/1 var(--body); transition: background .2s, color .2s; }
+.tier-tabs button:hover { background: #1e1a1b14; }
+.tier-tabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+@media (min-width: 761px) {
+  body .flavour-studio { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 56px; margin-top: 28px; }
+  .flavour-picks { grid-column: 1; grid-row: 1; }
+  body .sculpture-stage { grid-column: 2; grid-row: 1; height: 440px; }
+  body .sculpture-stage #recipe-canvas { max-width: none; }
+  .anchor-row { gap: 24px; }
+  body .flavour-anchor strong { font-size: clamp(26px, 2.6vw, 42px); }
+}
+@media (prefers-reduced-motion: reduce) { .tier-tabs button { transition: none; } }
+
+/* Demande : le champ date ne déborde plus sur mobile */
+body .event-inputs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+body .event-inputs > label { min-width: 0; }
+body .event-inputs input, body .event-inputs select { min-width: 0; max-width: 100%; }
+#event-date { -webkit-appearance: none; appearance: none; min-height: 44px; }
+
+/* Clin d'œil cupcake (contour) dans chaque section : rose sur fond sombre, encre sur fond clair */
+#pieces, #emma, #etapes, #composition, #brunch, #questions { position: relative; }
+.cupcake { position: absolute; z-index: 1; width: 44px; height: 44px; color: var(--ink); transform: rotate(-8deg); pointer-events: none; }
+.cupcake svg { display: block; width: 100%; height: 100%; }
+#etapes .cupcake, #brunch .cupcake { color: var(--pink); }
+#pieces .cupcake { top: 34px; right: var(--gutter); }
+#emma .cupcake { bottom: 22px; right: var(--gutter); }
+#etapes .cupcake { top: 34px; right: var(--gutter); }
+#composition .cupcake { top: 34px; right: var(--gutter); }
+#brunch .cupcake { top: 46px; right: var(--gutter); }
+#questions .cupcake { top: 34px; right: var(--gutter); }
+@media (min-width: 761px) {
+  .cupcake { width: 60px; height: 60px; }
+  #pieces .cupcake, #etapes .cupcake, #questions .cupcake { top: 48px; }
+  #composition .cupcake { top: 130px; }
+  #brunch .cupcake { top: auto; bottom: 30px; }
+  #emma .cupcake { bottom: 30px; }
+}
+@media (max-width: 760px) {
+  .cupcake { width: 36px; height: 36px; }
+  #pieces .cupcake { top: 10px; }
+  #emma { padding-bottom: 72px; }
+  #emma .cupcake { bottom: 20px; }
+}

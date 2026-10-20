@@ -98,20 +98,27 @@ export async function mountCake(el, recipe) {
   const gold = new THREE.MeshStandardMaterial({ color: 0xd9b46a, metalness: 1, roughness: 0.22 });
   const leafMat = new THREE.MeshStandardMaterial({ color: 0x6f8a55, roughness: 0.5 });
 
-  const base = {};
-  const buildTextures = rec => {
-    seed = 7;
-    base.b = canvasTex(drawSponge(PAL.biscuit[rec.biscuit]));
-    base.c = base.t = canvasTex(drawCream(PAL.creme[rec.creme]));
-    base.i = canvasTex(drawInsert(PAL.insert[rec.insert], window.cakePalette ? window.cakePalette.berry[rec.insert] : (rec.insert === 0 || rec.insert === 3)));
+  // un jeu de textures par étage (pièce montée : chaque étage a ses saveurs)
+  const base = [], texCache = {};
+  const layerOf = ti => { const ls = cur.layers || [cur]; return ls[Math.min(ti, ls.length - 1)]; };
+  const tierKey = ti => JSON.stringify(layerOf(ti));
+  const buildTextures = () => {
+    for (let ti = 0; ti < 3; ti++) {
+      const l = layerOf(ti), k = tierKey(ti);
+      if (!texCache[k]) {
+        seed = 7; const c = canvasTex(drawCream(PAL.creme[l.creme]));
+        texCache[k] = { b: canvasTex(drawSponge(PAL.biscuit[l.biscuit])), c, t: c, i: canvasTex(drawInsert(PAL.insert[l.insert], window.cakePalette ? window.cakePalette.berry[l.insert] : (l.insert === 0 || l.insert === 3))) };
+      }
+      base[ti] = texCache[k];
+    }
   };
-  const mat = (k, rx, ry) => { const t = base[k].clone(); t.needsUpdate = true; t.repeat.set(rx, ry); return new THREE.MeshStandardMaterial({ map: t, bumpMap: t, bumpScale: BUMP[k], roughness: ROUGH[k], side: THREE.DoubleSide }); };
+  const mat = (k, rx, ry, ti) => { const t = base[ti][k].clone(); t.needsUpdate = true; t.repeat.set(rx, ry); return new THREE.MeshStandardMaterial({ map: t, bumpMap: t, bumpScale: BUMP[k], roughness: ROUGH[k], side: THREE.DoubleSide }); };
 
   let cake = null, layers = [], stackH = 0, cur;
   const disposeObj = o => o.traverse(c => { if (c.isMesh) { if (c.geometry !== sphere) c.geometry.dispose(); const m = c.material; if (m && m !== gold && m !== leafMat && m !== porcelain) { m.map && m.map.dispose(); m.dispose(); } } });
 
-  const pearls = (r, y, count, size) => {
-    const im = new THREE.InstancedMesh(sphere, new THREE.MeshStandardMaterial({ color: PAL.creme[cur.creme], roughness: 0.35 }), count);
+  const pearls = (r, y, count, size, ti) => {
+    const im = new THREE.InstancedMesh(sphere, new THREE.MeshStandardMaterial({ color: PAL.creme[layerOf(ti).creme], roughness: 0.35 }), count);
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), sc = new THREE.Vector3(size, size, size);
     for (let i = 0; i < count; i++) { const a = TS + (i + 0.5) / count * TL; m4.compose(new THREE.Vector3(Math.sin(a) * r, y, Math.cos(a) * r), q, sc); im.setMatrixAt(i, m4); }
     im.castShadow = true; im.userData.pearl = true; return im;
@@ -120,16 +127,16 @@ export async function mountCake(el, recipe) {
   const applyMats = L => {
     [L.side, ...L.planes].forEach(m => { const mm = m.material; if (mm && mm.dispose) { mm.map && mm.map.dispose(); mm.dispose(); } });
     const K = 2.2;
-    L.side.material = mat(L.k, TL * L.r * K, L.h * K);
-    L.planes.forEach(p => { p.material = mat(L.k, L.r * K, L.h * K); });
-    L.g.children.filter(c => c.userData.pearl).forEach(c => c.material.color.set(PAL.creme[cur.creme]));
+    L.side.material = mat(L.k, TL * L.r * K, L.h * K, L.tier);
+    L.planes.forEach(p => { p.material = mat(L.k, L.r * K, L.h * K, L.tier); });
+    L.g.children.filter(c => c.userData.pearl).forEach(c => c.material.color.set(PAL.creme[layerOf(L.tier).creme]));
     if (L.deco) {
       L.deco.children.slice().forEach(c => { if (c.material !== gold && c.material !== leafMat) c.material.dispose(); L.deco.remove(c); });
-      const cols = FRUIT[cur.insert]; seed = 11 + cur.insert;
+      const topIns = layerOf(L.tier).insert, cols = FRUIT[topIns]; seed = 11 + topIns;
       const R = L.r, top = L.h;
       for (let i = 0; i < 11; i++) {
         const a = Math.PI + (rnd() - 0.5) * 2.2, rr = R * (0.35 + rnd() * 0.4), s = 0.055 + rnd() * 0.035;
-        const m = new THREE.Mesh(sphere, new THREE.MeshStandardMaterial({ color: cols[i % cols.length], roughness: cur.insert === 2 ? 0.2 : 0.4 }));
+        const m = new THREE.Mesh(sphere, new THREE.MeshStandardMaterial({ color: cols[i % cols.length], roughness: topIns === 2 ? 0.2 : 0.4 }));
         m.scale.setScalar(s); m.position.set(Math.sin(a) * rr, top + s * 0.75, Math.cos(a) * rr); m.castShadow = true; L.deco.add(m);
       }
       for (let i = 0; i < 6; i++) {
@@ -142,7 +149,7 @@ export async function mountCake(el, recipe) {
         m.rotation.set(rnd() * 0.5, rnd() * 3, rnd() * 0.4); m.castShadow = true; L.deco.add(m);
       }
     }
-    L.matKey = cur.key;
+    L.matKey = tierKey(L.tier);
   };
 
   const build = tiers => {
@@ -164,8 +171,8 @@ export async function mountCake(el, recipe) {
           p.position.set(Math.sin(th) * r / 2, h / 2, Math.cos(th) * r / 2); p.rotation.y = th - Math.PI / 2;
           p.castShadow = p.receiveShadow = true; g.add(p); return p;
         });
-        if (li === 0) g.add(pearls(R * 1.0, 0.03 * R + 0.005, Math.round(46 * R), 0.034 * Math.max(0.75, R)));
-        if (k === 't') g.add(pearls(R * 0.98, h + 0.02, Math.round(40 * R), 0.028 * Math.max(0.75, R)));
+        if (li === 0) g.add(pearls(R * 1.0, 0.03 * R + 0.005, Math.round(46 * R), 0.034 * Math.max(0.75, R), ti));
+        if (k === 't') g.add(pearls(R * 0.98, h + 0.02, Math.round(40 * R), 0.028 * Math.max(0.75, R), ti));
         if (k === 't' && ti === radii.length - 1) { L.deco = new THREE.Group(); g.add(L.deco); }
         L.g = g; L.side = side; g.position.y = y + (reduced ? 0 : 6); cake.add(g);
         layers.push(L); y += h;
@@ -180,15 +187,16 @@ export async function mountCake(el, recipe) {
   };
 
   cur = { ...recipe, tiers: recipe.tiers || 1, key: JSON.stringify(recipe) };
-  buildTextures(cur); build(cur.tiers);
+  buildTextures(); build(cur.tiers);
   camCur.d = camTgt.d; camCur.y = camTgt.y; cam.aspect = W() / H(); cam.updateProjectionMatrix(); placeCam();
 
   const now = () => performance.now() / 1000;
   const easeIn = p => p * p * p, easeOut = p => 1 - Math.pow(1 - p, 3);
   const assemble = withOut => {
     if (reduced) { layers.forEach(L => { applyMats(L); L.off = 0; L.g.position.y = L.base; }); return; }
-    const t = now(), n = layers.length, step = n > 12 ? 0.025 : 0.045, outDur = withOut ? 0.18 : 0;
-    layers.forEach((L, i) => {
+    const moving = withOut ? layers.filter(L => L.matKey !== tierKey(L.tier)) : layers;
+    const t = now(), n = moving.length, step = n > 12 ? 0.025 : 0.045, outDur = withOut ? 0.18 : 0;
+    moving.forEach((L, i) => {
       L.o0 = L.off;
       L.outS = t + (withOut ? (n - 1 - i) * 0.02 : 0); L.outE = L.outS + outDur;
       L.inS = t + outDur + (withOut ? n * 0.01 : 0) + 0.04 + i * step; L.inE = L.inS + 0.42;
@@ -199,9 +207,9 @@ export async function mountCake(el, recipe) {
     if (t < L.outS) L.off = L.o0;
     else if (t < L.outE) L.off = L.o0 + (6 - L.o0) * easeIn((t - L.outS) / (L.outE - L.outS));
     else if (t < L.inS) L.off = 6;
-    else if (t < L.inE) { if (L.matKey !== cur.key) applyMats(L); L.off = 6 * (1 - easeOut((t - L.inS) / (L.inE - L.inS))); }
-    else { if (L.matKey !== cur.key) applyMats(L); L.off = 0; }
-    if (L.off >= 5.99 && L.matKey !== cur.key) applyMats(L);
+    else if (t < L.inE) { if (L.matKey !== tierKey(L.tier)) applyMats(L); L.off = 6 * (1 - easeOut((t - L.inS) / (L.inE - L.inS))); }
+    else { if (L.matKey !== tierKey(L.tier)) applyMats(L); L.off = 0; }
+    if (L.off >= 5.99 && L.matKey !== tierKey(L.tier)) applyMats(L);
     L.g.position.y = L.base + L.off;
     const q = (t - L.inE) / 0.22;
     const sq = q > 0 && q < 1 ? Math.sin(q * Math.PI) * 0.05 : 0;
@@ -228,7 +236,7 @@ export async function mountCake(el, recipe) {
   const io = new IntersectionObserver(es => setVisibility(es[0].isIntersecting), { threshold: 0.25 });
   io.observe(el);
   const ro = new ResizeObserver(fit); ro.observe(el);
-  let raf, visibilityCheckAt = 0;
+  let raf, visibilityCheckAt = 0, spin = 0, lastT = now();
   const loop = () => {
     raf = requestAnimationFrame(loop);
     const t = now();
@@ -242,7 +250,9 @@ export async function mountCake(el, recipe) {
     if (cv.width !== Math.round(el.clientWidth * renderer.getPixelRatio())) fit();
     layers.forEach(L => updateLayer(L, t));
     camCur.d += (camTgt.d - camCur.d) * 0.06; camCur.y += (camTgt.y - camCur.y) * 0.06; placeCam();
-    if (cake) cake.rotation.y = -0.42 + (reduced ? 0 : Math.sin(t * 0.35) * 0.22) + userRot;
+    if (!reduced && dragX == null) spin += Math.min(t - lastT, 0.05) * 0.3;
+    lastT = t;
+    if (cake) cake.rotation.y = -0.42 + spin + userRot;
     renderer.render(scene, cam);
   };
   loop();
@@ -252,7 +262,7 @@ export async function mountCake(el, recipe) {
       const k = JSON.stringify(rec);
       if (k === cur.key) return;
       const tiersChanged = (rec.tiers || 1) !== cur.tiers;
-      cur = { ...rec, tiers: rec.tiers || 1, key: k }; buildTextures(cur);
+      cur = { ...rec, tiers: rec.tiers || 1, key: k }; buildTextures();
       if (tiersChanged) { build(cur.tiers); fit(); if (started) assemble(false); }
       else if (started) assemble(true);
     },
