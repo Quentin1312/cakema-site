@@ -140,3 +140,16 @@ $('#no-date').addEventListener('change',e=>{const d=$('#event-date');d.disabled=
 (()=>{const m=/^(\d+):([\d.,]+)(?::(\d+))?$/.exec(new URLSearchParams(location.search).get('gateau')||'');if(!m)return;setGuestCount(+m[1]);const sets=m[2].split(',').map(t=>t.split('.').map(Number));const fit=(gi,v)=>v<groups[gi].options.length?v:0;recipe.layers.forEach((L,t)=>{const v=sets[sets.length===3?t:0]||[];FLAVOURS.forEach((k,gi)=>{L[k]=fit(gi,v[gi]||0);});});if(m[3])recipe.extra=fit(3,+m[3]);renderPalette();updateRecipe();})();
 // Arrivée par un lien vers une section (#composition, #brunch…) : on y retourne une fois la page chargée, les images ayant pu décaler la mise en page
 addEventListener('load',()=>{const t=location.hash&&document.querySelector(location.hash);if(t)t.scrollIntoView();});
+
+// Section Emma : pile de photos. Toutes les 4,5 s (ou au toucher / glisser / flèches), la photo du dessus part sur le côté et repasse sous la pile.
+(()=>{const stack=$('.photo-stack');if(!stack)return;const imgs=[...stack.querySelectorAll('img')];let order=imgs.map((_,i)=>i),busy=false,timer=null,startX=null;
+const dots=document.createElement('div');dots.className='stack-dots';dots.setAttribute('aria-hidden','true');dots.innerHTML=imgs.map(()=>'<i></i>').join('');stack.append(dots);
+const tilt=[[0,0,-2],[10,6,3],[-9,10,-5],[6,14,5],[-4,18,-1]];
+const lay=()=>{order.forEach((idx,pos)=>{const im=imgs[idx],[x,y,r]=tilt[Math.min(pos,tilt.length-1)];im.style.zIndex=imgs.length-pos;im.style.setProperty('--x',x+'px');im.style.setProperty('--y',y+'px');im.style.setProperty('--r',r+'deg');im.setAttribute('aria-hidden',String(pos!==0));});[...dots.children].forEach((d,i)=>d.classList.toggle('on',i===order[0]));};
+const next=(dir=1)=>{if(busy)return;busy=true;const top=imgs[order[0]];if(reduced){order.push(order.shift());lay();busy=false;return;}top.classList.add('is-leaving');top.style.setProperty('--x',(dir*115)+'%');top.style.setProperty('--r',(dir*14)+'deg');setTimeout(()=>{top.classList.remove('is-leaving');order.push(order.shift());lay();busy=false;},450);};
+const restart=()=>{clearInterval(timer);if(!reduced)timer=setInterval(()=>{if(!document.hidden&&stackVisible)next(1);},4500);};
+let stackVisible=false;new IntersectionObserver(([e])=>{stackVisible=e.isIntersecting;}).observe(stack);
+stack.addEventListener('pointerdown',e=>{startX=e.clientX;});
+stack.addEventListener('pointerup',e=>{if(startX==null)return;const dx=e.clientX-startX;startX=null;next(dx<-30?-1:1);restart();});
+stack.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key==='Enter'||e.key===' '){e.preventDefault();next(e.key==='ArrowLeft'?-1:1);restart();}});
+lay();restart();})();
