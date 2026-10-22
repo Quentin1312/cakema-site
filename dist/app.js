@@ -131,7 +131,7 @@ ctaObserver.observe($('.flavour-studio'));ctaObserver.observe($('#brunch'));
 
 // Section brunch : ouvre la demande avec l'occasion « Brunch »
 $('#open-brunch').addEventListener('click',()=>{$('#occasion').value='Brunch';$('#message-result').hidden=true;eventDialog.showModal();});
-const syncRecipeLine=()=>{const brunch=$('#occasion').value==='Brunch';$('.event-recipe').hidden=brunch;$('.brunch-quiz').hidden=!brunch;};
+const syncRecipeLine=()=>{const brunch=$('#occasion').value==='Brunch';$('.event-recipe').hidden=brunch;$('.brunch-quiz').hidden=!brunch;$('.brunch-quiz').querySelectorAll('input,textarea').forEach(i=>{i.disabled=!brunch;});};
 $('#occasion').addEventListener('change',syncRecipeLine);$('#open-brunch').addEventListener('click',syncRecipeLine);
 document.querySelectorAll('#open-event,#open-contact,#open-header').forEach(b=>b.addEventListener('click',()=>{if($('#occasion').value==='Brunch')$('#occasion').value='Mariage';syncRecipeLine();}));
 
@@ -149,3 +149,12 @@ function brunchAnswers(){const parts=[];document.querySelectorAll('.bq-section')
 const brunchQuiz=$('.brunch-quiz');
 brunchQuiz.addEventListener('input',e=>{$('#message-result').hidden=true;const sec=e.target.closest('.bq-section');const n=[...sec.querySelectorAll('.bq-field')].filter(f=>f.querySelector('input:checked')||[...f.querySelectorAll('input[type=text],input[type=number],textarea')].some(t=>t.value.trim())).length;sec.querySelector('.bq-count').textContent=n?`${n} réponse${n>1?'s':''}`:'';});
 syncRecipeLine();
+
+// Questionnaire brunch obligatoire : chaque rubrique doit être remplie (sauf champs « facultatif » et questions conditionnelles non concernées)
+const quizValue=name=>[...document.querySelectorAll(`.brunch-quiz [name="${name}"]:checked`)].map(i=>i.value);
+const fieldNeeded=f=>{const r=f.dataset.req;if(r==='1')return true;if(r==='0')return false;const hit=quizValue(f.dataset.reqName).some(v=>f.dataset.reqValues.split('|').includes(v));return r==='if'?hit:!hit;};
+function checkQuiz(){let first=null;document.querySelectorAll('.bq-field').forEach(f=>{const need=fieldNeeded(f);const t=f.querySelector('input[type=text],input[type=number],textarea');if(t){t.required=need;return;}const boxes=[...f.querySelectorAll('input')];const ok=!need||boxes.some(b=>b.checked);boxes.forEach(b=>b.setCustomValidity(''));if(!ok){boxes[0].setCustomValidity('Merci de choisir au moins une réponse.');}f.classList.toggle('bq-missing',false);});return first;}
+$('#event-panel button[type=submit]').addEventListener('click',()=>{if($('#occasion').value!=='Brunch')return;checkQuiz();const bad=[...document.querySelectorAll('.brunch-quiz input,.brunch-quiz textarea')].filter(i=>!i.disabled&&!i.checkValidity());document.querySelectorAll('.bq-field').forEach(f=>f.classList.toggle('bq-missing',bad.some(i=>f.contains(i))));if(bad.length){const sec=bad[0].closest('.bq-section');sec.open=true;}});
+brunchQuiz.addEventListener('change',()=>{checkQuiz();document.querySelectorAll('.bq-missing').forEach(f=>{const inputs=[...f.querySelectorAll('input,textarea')];if(inputs.every(i=>i.checkValidity()))f.classList.remove('bq-missing');});});
+brunchQuiz.addEventListener('input',e=>{const f=e.target.closest('.bq-field');if(f&&e.target.checkValidity())f.classList.remove('bq-missing');});
+checkQuiz();

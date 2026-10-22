@@ -715,3 +715,6 @@ body .atelier-text>p:nth-last-of-type(2){font-weight:600}
 .bq-opt input:focus-visible + span { outline: 2px solid var(--pink-ink); outline-offset: 2px; }
 .bq-input input, .bq-input textarea { display: block; width: 100%; min-height: 44px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--ink); font: 16px/1.4 var(--body); }
 @media (prefers-reduced-motion: reduce) { .bq-opt span { transition: none; } }
+.bq-field em { font-style: normal; font-weight: 400; color: #6d5a62; }
+.bq-missing legend, .bq-missing > span { color: #b00020; }
+.bq-missing .bq-opt span, .bq-missing input, .bq-missing textarea { border-color: #b00020; }
