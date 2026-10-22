@@ -2,7 +2,7 @@
 
 Site vitrine de pâtisserie : direction artistique rose et noire, gâteau 3D en rotation, présentoir animé et composition interactive des saveurs.
 
-[Ouvrir le site](https://quentin1312.github.io/cakema-site/)
+[Ouvrir le site](https://cakema.fr/)
 
 ## Publication
 
