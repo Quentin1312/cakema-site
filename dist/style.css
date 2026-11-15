@@ -719,19 +719,3 @@ body .atelier-text>p:nth-last-of-type(2){font-weight:600}
 .bq-missing legend, .bq-missing > span { color: #b00020; }
 .bq-missing .bq-opt span, .bq-missing input, .bq-missing textarea { border-color: #b00020; }
 
-/* Section mariage (photo des mariés) */
-.wedding{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,80px);align-items:center;padding:60px var(--gutter);background:var(--ink);color:var(--paper)}
-.wedding-photo{margin:0;justify-self:center;width:100%;max-width:440px;background:var(--paper);padding:7px;transform:rotate(-2deg);box-shadow:0 22px 40px -22px #000}
-.wedding-photo img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover}
-.wedding-copy .section-index{color:var(--pale);margin-bottom:23px}
-.wedding h2{font-size:clamp(52px,5.4vw,84px);line-height:1.08}
-.wedding h2 span{color:var(--pink)}
-.wedding-text{max-width:470px;margin-top:24px;font-size:16px;line-height:1.6}
-.wedding-text>p:first-child{font-size:21px;line-height:1.35;letter-spacing:-.02em}
-.wedding-points{list-style:none;padding:0;margin:20px 0 0;border-top:1px solid #ffffff2a}
-.wedding-points li{padding:11px 0 11px 22px;border-bottom:1px solid #ffffff2a;position:relative}
-.wedding-points li::before{content:"";position:absolute;left:2px;top:19px;width:8px;height:8px;border-radius:50%;background:var(--pink)}
-.wedding-note{margin-top:16px;font-size:13px;color:#d9c7cf}
-.wedding .underlined-link{margin-top:23px;background:var(--pink);border-color:var(--pink);color:#fff}
-.wedding .underlined-link:hover{background:#c2125d}
-@media(max-width:760px){.wedding{grid-template-columns:1fr;padding:40px var(--gutter);gap:30px}.wedding-photo{max-width:340px}.wedding h2{font-size:12.6vw}.wedding-text{max-width:100%}.wedding-text>p:first-child{font-size:19px}.wedding .underlined-link{width:100%}}

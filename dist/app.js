@@ -159,5 +159,3 @@ brunchQuiz.addEventListener('change',()=>{checkQuiz();document.querySelectorAll(
 brunchQuiz.addEventListener('input',e=>{const f=e.target.closest('.bq-field');if(f&&e.target.checkValidity())f.classList.remove('bq-missing');});
 checkQuiz();
 
-// Section mariage : le lien présélectionne « Mariage » dans le formulaire
-document.querySelectorAll('[data-occasion]').forEach(l=>l.addEventListener('click',()=>{const o=$('#occasion');o.value=l.dataset.occasion;o.dispatchEvent(new Event('change',{bubbles:true}));}));
